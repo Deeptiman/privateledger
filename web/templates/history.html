@@ -1,0 +1,120 @@
+{{define "body"}}
+
+<title>History</title>
+
+
+	{{ if .Response }}
+
+		{{ if .Error }}
+		
+			 <!-- Show valid Error message in the dashboard screen !-->
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+					<strong>Something went wrong - </strong> {{ .ErrorMsg}}
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+		{{end}}	
+    {{ if .Success}}
+
+    {{end}}
+				          
+             
+                <main>
+                              
+                    <div class="position-relative" style="margin-top: 80px;">
+                          
+                        <div class="card border-dark mb-3">
+                            <div class="card-header text-dark bg-light mb-3 ">
+                                <span class="font-weight-bold"><i class="fa fa-history" aria-hidden="true"></i>
+                                History </span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title"> <p class="text-sm-left text-black" style="font-size: 15px;">Displaying all the transaction performed across time for the user <span class="badge badge-pill badge-dark " style=" font-size: 13px;" id="nameBadge">{{ .HistoryUser}}</span> in the Hyperledger</p>
+                                </h5>
+
+                                <h5 class="card-title"> <p class="text-sm-left text-black" style="font-size: 15px;">Ledger Queries : </p>
+                                  <p class="text-dark font-weight-bolder badge badge-pill badge-danger  waves-effect" style=" font-size: 13px;" id="createUser">createUser</p>
+                                  <p class="text-dark font-weight-bolder badge badge-pill badge-danger  waves-effect" style=" margin-left: 10px; font-size: 13px;" id="readUser">  readUser</p>
+                                  <p class="text-dark font-weight-bolder badge badge-pill badge-danger  waves-effect" style=" margin-left: 10px; font-size: 13px;" id="updateUserData">  updateUserData</p>
+                                  <p class="text-dark font-weight-bolder badge badge-pill badge-danger  waves-effect" style=" margin-left: 10px; font-size: 13px;" id="deleteUser">  deleteUser</p>
+                                  <p class="text-dark font-weight-bolder badge badge-pill badge-danger  waves-effect" style=" margin-left: 10px; font-size: 13px;" id="shareUser">  shareUser</p>
+                                
+                                </h5>
+                                
+                                {{ $org1 := .CustomOrg1}}
+                                {{ $org2 := .CustomOrg2}}
+                                {{ $org3 := .CustomOrg3}}
+                                {{ $org4 := .CustomOrg4}}
+
+                                <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
+
+                                        <thead>
+                                                <tr>
+                                                    <th class="th-sm">QueryCreator</th>
+                                                    <th class="th-sm">Company</th>
+                                                    <th class="th-sm">Query</th>
+                                                    <th class="th-sm">Time</th>
+                                                    <th class="th-sm">Remarks</th>
+                                                </tr>
+                                        </thead>
+
+                                        <tbody>	
+                                        
+                                                {{range $id, $history := .AllHistoryData}}
+
+                                                    <tr>
+
+                                                        <td class="td-sm"> <p class="text-dark font-weight-bolder badge badge-pill badge-dark  waves-effect" style=" font-size: 14px;"> {{$history.QueryCreator}} </p></td>
+                                                        
+                                                        <td class="td-sm"> 
+                                                        
+                                                            {{if eq $history.TargetOrg "org1" }}
+                                                                <p class="text-dark font-weight-bolder badge badge-pill badge-dark  waves-effect"  style=" font-size: 14px;"> {{$org1}} </p>                                                             
+                                                            {{else if eq $history.TargetOrg "org2"}}
+                                                                <p class="text-dark font-weight-bolder badge badge-pill badge-dark  waves-effect"  style=" font-size: 14px;"> {{$org2}} </p>                                                             
+                                                            {{else if eq $history.TargetOrg "org3"}}
+                                                                <p class="text-dark font-weight-bolder badge badge-pill badge-dark  waves-effect"  style=" font-size: 14px;"> {{$org3}} </p>                                                             
+                                                            {{else if eq $history.TargetOrg "org4"}}
+                                                                <p class="text-dark font-weight-bolder badge badge-pill badge-dark  waves-effect"  style=" font-size: 14px;"> {{$org4}} </p>                                                                                                                         
+                                                            {{end}}
+                                                        </td>
+
+                                                        <td class="td-sm"> <p class="text-dark font-weight-bolder badge badge-pill badge-dark  waves-effect" style=" font-size: 14px;"> {{$history.Query}} </p></td>
+                                                        <td class="td-sm"> <p class="text-dark font-weight-bolder"> {{$history.Time}}</p></td>
+                                                        <td class="td-sm"> <p class="text-dark font-weight-bolder"> {{$history.Remarks}} </p></td>
+
+                                                    </tr>
+
+                                                {{end}}
+                                        </tbody>
+                                </table>
+                            </div>
+                          </div>
+                    </div>                    
+                </main>
+
+                            
+                <!-- Change Password Page Navigation -->
+                <form name="changePwdForm" action="/change_password.html" method="post">
+                  <input type="hidden" name="openChangePwdSubmitted" value="true">	
+                </form>
+
+                <script type="text/javascript">
+
+                        $(document).ready(function () {
+                            $('#dtBasicExample').DataTable();
+                            $('.dataTables_length').addClass('bs-select');
+                
+                            $('.changePwdBtn').click(function() {
+                              console.log(" ChangePwd Btn Click")
+                              $('form[name="changePwdForm"]').submit();							
+                            });
+                        })
+          
+                </script>
+
+
+  {{ end }}
+
+{{end}}

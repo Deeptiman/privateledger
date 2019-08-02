@@ -1,0 +1,317 @@
+version: '2'
+
+services:
+
+  orderer.private.ledger.com:
+    image: ${FABRIC_DOCKER_REGISTRY}${FABRIC_ORDERER_FIXTURE_IMAGE}:${ARCH}${ARCH_SEP}${FABRIC_ORDERER_FIXTURE_TAG}
+    hostname: orderer.private.ledger.com
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=info
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISPROFILE=OrdererOrg
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ./artifacts/orderer.genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ./crypto-config/ordererOrganizations/private.ledger.com/orderers/orderer.private.ledger.com/msp:/var/hyperledger/orderer/msp
+      - ./crypto-config/ordererOrganizations/private.ledger.com/orderers/orderer.private.ledger.com/tls:/var/hyperledger/orderer/tls
+    ports:
+      - 7050:7050
+    expose:
+      - 7050
+    networks:
+      default:
+        aliases:
+          - orderer.private.ledger.com
+
+  ca.org1.private.ledger.com:
+    container_name: ca.org1.private.ledger.com
+    extends:
+      file:  docker-compose-org1.yaml
+      service: ca.org1.private.ledger.com     
+    networks:
+      default:
+        aliases:
+          - ca.org1.private.ledger.com
+
+  couchdb.peer0.org1.private.ledger.com:
+    container_name: couchdb.peer0.org1.private.ledger.com
+    extends:
+      file:  docker-compose-org1.yaml
+      service: couchdb.peer0.org1.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer0.org1.private.ledger.com
+
+  peer0.org1.private.ledger.com:
+    container_name: peer0.org1.private.ledger.com
+    extends:
+      file:  docker-compose-org1.yaml
+      service: peer0.org1.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer0.org1.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer0.org1.private.ledger.com
+    
+  couchdb.peer1.org1.private.ledger.com:
+    container_name: couchdb.peer1.org1.private.ledger.com
+    extends:
+      file:  docker-compose-org1.yaml
+      service: couchdb.peer1.org1.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer1.org1.private.ledger.com
+
+  peer1.org1.private.ledger.com:
+    container_name: peer1.org1.private.ledger.com
+    extends:
+      file:  docker-compose-org1.yaml
+      service: peer1.org1.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer1.org1.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer1.org1.private.ledger.com
+    
+
+  ca.org2.private.ledger.com:
+    container_name: ca.org2.private.ledger.com
+    extends:
+      file:  docker-compose-org2.yaml
+      service: ca.org2.private.ledger.com     
+    networks:
+      default:
+        aliases:
+          - ca.org2.private.ledger.com
+
+  couchdb.peer0.org2.private.ledger.com:
+    container_name: couchdb.peer0.org2.private.ledger.com
+    extends:
+      file:  docker-compose-org2.yaml
+      service: couchdb.peer0.org2.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer0.org2.private.ledger.com
+
+  peer0.org2.private.ledger.com:
+    container_name: peer0.org2.private.ledger.com
+    extends:
+      file:  docker-compose-org2.yaml
+      service: peer0.org2.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer0.org2.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer0.org2.private.ledger.com
+    
+  couchdb.peer1.org2.private.ledger.com:
+    container_name: couchdb.peer1.org2.private.ledger.com
+    extends:
+      file:  docker-compose-org2.yaml
+      service: couchdb.peer1.org2.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer1.org2.private.ledger.com
+
+  peer1.org2.private.ledger.com:
+    container_name: peer1.org2.private.ledger.com
+    extends:
+      file:  docker-compose-org2.yaml
+      service: peer1.org2.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer1.org2.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer1.org2.private.ledger.com
+
+  ca.org3.private.ledger.com:
+    container_name: ca.org3.private.ledger.com
+    extends:
+      file:  docker-compose-org3.yaml
+      service: ca.org3.private.ledger.com     
+    networks:
+      default:
+        aliases:
+          - ca.org3.private.ledger.com
+
+  couchdb.peer0.org3.private.ledger.com:
+    container_name: couchdb.peer0.org3.private.ledger.com
+    extends:
+      file:  docker-compose-org3.yaml
+      service: couchdb.peer0.org3.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer0.org3.private.ledger.com
+
+  peer0.org3.private.ledger.com:
+    container_name: peer0.org3.private.ledger.com
+    extends:
+      file:  docker-compose-org3.yaml
+      service: peer0.org3.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer0.org3.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer0.org3.private.ledger.com
+    
+  couchdb.peer1.org3.private.ledger.com:
+    container_name: couchdb.peer1.org3.private.ledger.com
+    extends:
+      file:  docker-compose-org3.yaml
+      service: couchdb.peer1.org3.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer1.org3.private.ledger.com
+
+  peer1.org3.private.ledger.com:
+    container_name: peer1.org3.private.ledger.com
+    extends:
+      file:  docker-compose-org3.yaml
+      service: peer1.org3.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer1.org3.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer1.org3.private.ledger.com
+
+  ca.org4.private.ledger.com:
+    container_name: ca.org4.private.ledger.com
+    extends:
+      file:  docker-compose-org4.yaml
+      service: ca.org4.private.ledger.com     
+    networks:
+      default:
+        aliases:
+          - ca.org4.private.ledger.com
+
+  couchdb.peer0.org4.private.ledger.com:
+    container_name: couchdb.peer0.org4.private.ledger.com
+    extends:
+      file:  docker-compose-org4.yaml
+      service: couchdb.peer0.org4.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer0.org4.private.ledger.com
+
+  peer0.org4.private.ledger.com:
+    container_name: peer0.org4.private.ledger.com
+    extends:
+      file:  docker-compose-org4.yaml
+      service: peer0.org4.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer0.org4.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer0.org4.private.ledger.com
+    
+  couchdb.peer1.org4.private.ledger.com:
+    container_name: couchdb.peer1.org4.private.ledger.com
+    extends:
+      file:  docker-compose-org4.yaml
+      service: couchdb.peer1.org4.private.ledger.com
+    networks:
+      default:
+        aliases:
+          - couchdb.peer1.org4.private.ledger.com
+
+  peer1.org4.private.ledger.com:
+    container_name: peer1.org4.private.ledger.com
+    extends:
+      file:  docker-compose-org4.yaml
+      service: peer1.org4.private.ledger.com
+    depends_on:
+      - orderer.private.ledger.com
+      - couchdb.peer1.org4.private.ledger.com
+      - builder
+      - golangruntime      
+    networks:
+      default:
+        aliases:
+          - peer1.org4.private.ledger.com
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:latest
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.org1.private.ledger.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.private.ledger.com/peers/peer0.org1.private.ledger.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.private.ledger.com/peers/peer0.org1.private.ledger.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.private.ledger.com/peers/peer0.org1.private.ledger.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.private.ledger.com/users/Admin@org1.private.ledger.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+
+
+ # builder is only here to create a dependency on the image (not used as part of compose)
+  builder:
+    image: ${FABRIC_DOCKER_REGISTRY}${FABRIC_BUILDER_FIXTURE_IMAGE}:${ARCH}${ARCH_SEP}${FABRIC_BUILDER_FIXTURE_TAG}
+    command: tail -F anything
+    logging:
+      driver: none
+
+ # golangruntime is only here to create a dependency on the image (not used as part of compose)
+  golangruntime:
+    image: ${FABRIC_DOCKER_REGISTRY}${FABRIC_BASEOS_FIXTURE_IMAGE}:${ARCH}${ARCH_SEP}${FABRIC_BASEOS_FIXTURE_TAG}
+    command: tail -F anything
+    logging:
+      driver: none

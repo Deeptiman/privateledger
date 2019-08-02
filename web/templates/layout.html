@@ -1,0 +1,89 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+		<link rel="icon" href="/assets/css/images/logo_fabric.png"/>	
+<head>
+
+	   <!-- Font Awesome -->
+	  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+	  <!-- Bootstrap core CSS -->
+	  <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+	  <!-- Material Design Bootstrap -->
+	  <link href="/assets/css/mdb.min.css" rel="stylesheet">
+	  <!-- Your custom styles (optional) -->
+	  <link href="/assets/css/style.css" rel="stylesheet">
+
+	  <!-- MDBootstrap Datatables  -->
+	  <link href="/assets/css/addons/datatables.min.css" rel="stylesheet">
+	
+	 <!-- SCRIPTS -->
+	<!-- JQuery -->
+	<script type="text/javascript" src="/assets/js/jquery-3.4.1.min.js"></script>
+	<!-- Bootstrap tooltips -->
+	<script type="text/javascript" src="/assets/js/popper.min.js"></script>
+	<!-- Bootstrap core JavaScript -->
+	<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
+	<!-- MDB core JavaScript -->
+	<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+	<!-- MDBootstrap Datatables  -->
+	<script type="text/javascript" src="/assets/js/addons/datatables.min.js"></script>
+
+		
+</head>  
+
+<body>
+
+	    <header>
+			
+				<nav class="navbar fixed-top navbar-expand-md navbar-dark black mdb-color mb-5">
+						  
+					<div class="mr-auto">
+							 
+						<nav aria-label="breadcrumb">
+								<a class="navbar-brand" href="/index.html">
+									<img src="/assets/css/images/logo_fabric.png" width="30" height="25"/>					
+								</a>  
+								<ol class="breadcrumb d-inline-flex pl-0 pt-0">
+							<li class="breadcrumb-item"><a class="white-text font-weight-bolder" href="/index.html"><span class="font-weight-bold">Private Ledger</span></a></li>
+							</ol>
+						</nav>
+													  
+					</div>
+  
+					<ul class="navbar-nav ml-auto nav-flex-icons">							
+							<li class="nav-item avatar dropdown">
+								<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-55" data-toggle="dropdown"
+								  aria-haspopup="true" aria-expanded="false">
+								  <img src="/assets/css/images/profile.png" class="rounded-circle z-depth-0"
+									alt="avatar image" width="34" height="34">
+								</a>
+								<div class="dropdown-menu dropdown-menu-right dropdown-info" aria-labelledby="navbarDropdownMenuLink-4">
+									<a class="dropdown-item changePwdBtn">Change Password</a>
+									<a class="dropdown-item" href="/logout">Logout</a>
+								</div>
+							</li>
+					</ul>
+					 
+				</nav>
+							
+		</header>
+   
+  <main class="container">
+    {{template "body" .}}
+  </main>
+
+   <!-- Footer -->
+ <footer>
+
+        <!-- Copyright -->
+        <div class="text-center font-weight-bolder">
+          <a href="https://mdbootstrap.com/education/bootstrap/" style="font-size: 13px; color: black"> A Hyperledger Demo</a>
+        </div>
+        <!-- Copyright -->
+      
+    </footer>
+      <!-- Footer -->
+
+</body>
+</html>
+{{end}}

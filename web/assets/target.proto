@@ -1,0 +1,9 @@
+syntax="proto3";
+
+package model;
+
+message Target {
+
+   int32 access = 1;
+   string remarks = 2;
+}

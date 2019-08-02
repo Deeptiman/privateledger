@@ -1,0 +1,983 @@
+{{define "body"}}
+
+
+    <script src="//cdn.rawgit.com/dcodeIO/protobuf.js/6.8.8/dist/protobuf.js"></script>
+    <title>Dashboard</title>
+
+    {{ if .Response }}
+        
+    
+            <!--
+                The Nav bar header of the dashboard with Change password and Logout option
+            -->    
+            
+            
+        {{ if .Error }}
+
+        
+                <!-- Show valid Error message in the dashboard screen !-->
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Something went wrong - </strong> {{ .ErrorMsg}}
+                        <p class="text-sm-left text-primary font-weight-bolder" style="font-size: 13px;">            
+                                <a href="/index.html"> Please click here to reload </a>
+                        </p>
+                    </div>
+                 
+        {{ else if .Success}}
+
+            {{ if .Update}}
+                
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+					<strong>Update request is successful for User - </strong> {{ .UpdateUser}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+            {{end}}
+ 
+
+            {{ if .Delete}}
+                
+                {{ if .Logout}}
+
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>You should logout immediately - </strong> {{ .DeleteUser}}
+                        <p class="text-sm-left text-primary font-weight-bolder" style="font-size: 13px;">            
+                            <a href="/logout">Logout</a>
+                        </p>
+                    </div>                    
+
+                {{else}}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Delete request is successful for User - </strong> {{ .DeleteUser}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {{end}}
+
+            {{end}}
+
+            <!--
+                
+                Main Layout : Show the user details of an Organization
+
+                Admin : Show all the users from the Hyperledger of the logged in Org Admin
+                User : Show the details of the logged in user            
+            -->
+
+            <main>
+                
+                    {{  $SessionOrg := .SessionOrg}}
+                    {{  $SessionUser := .SessionUserData }}
+
+                    {{  $ALL  :=  .ALL}}
+                    {{  $WRITE := .WRITE}}
+                    {{  $DELETE := .DELETE}}
+                                                       
+                    {{ $org1 := .CustomOrg1}}
+                    {{ $org2 := .CustomOrg2}}
+                    {{ $org3 := .CustomOrg3}}
+                    {{ $org4 := .CustomOrg4}}
+
+
+                    {{if .Admin}}
+
+                        <div class="flex-center flex-column" style="margin-top: 80px;">
+                        <div class="card border-primary mb-3">
+                            <div class="card-header text-white bg-primary mb-3">
+    
+                                    <span class="font-weight-bold"><i class="fa fa-table" aria-hidden="true"></i> Dashboard</span>
+                                
+                            </div>
+
+                            <div class="card-body">
+                                <h5 class="text-lg-left"><i class="fa fa-address-book" aria-hidden="true"></i>
+                                    <span class="badge badge-dark indigo darken-4 badge-pill text-sm-left" style="font-size: 13px;">{{ .SessionUserData.Email}}</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-building" aria-hidden="true"></i>
+                                                                        
+                                    {{if eq .SessionOrg "org1" }}
+                                        <span class="badge badge-dark indigo darken-4 badge-pill text-sm-left" style="font-size: 13px;">{{ .CustomOrg1}}</span></h5>
+                                    {{else if eq .SessionOrg "org2"}}
+                                        <span class="badge badge-dark indigo darken-4 badge-pill text-sm-left" style="font-size: 13px;">{{ .CustomOrg2}}</span></h5>
+                                    {{else if eq .SessionOrg "org3"}}
+                                        <span class="badge badge-dark indigo darken-4 badge-pill text-sm-left" style="font-size: 13px;">{{ .CustomOrg3}}</span></h5>
+                                    {{else if eq .SessionOrg "org4"}}
+                                        <span class="badge badge-dark indigo darken-4 badge-pill text-sm-left" style="font-size: 13px;">{{ .CustomOrg4}}</span></h5>
+                                    {{end}}
+
+                                    <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
+
+                                        <thead>
+                                            <tr>
+                                                    <th class="th-sm">Name</th>
+                                                    <th class="th-sm">Email</th>
+                                                    <th class="th-sm">Mobile</th>
+                                                    <th class="th-sm">Age</th>
+                                                    <th class="th-sm">Salary</th>
+                                                    <th class="th-sm">Company</th>
+                                                    <th class="th-sm">Role</th>                                    
+                                                    <th class="th-sm">Edit</th>
+                                                    <th class="th-sm">Share</th>
+                                                    <th class="th-sm">Delete</th>					
+                                            </tr>
+                                        </thead>
+
+                                {{range $id, $user := .AllUsersData}}
+
+                                
+                                   
+                                        <tbody>
+                                            
+                                            <input type="text" style="visibility:hidden" id="sessionOrg" name="sessionOrg" value="{{ $SessionOrg}}">
+                                                                                
+                                                        <tr>
+
+                                                                <td> <p class="text-dark font-weight-bolder"> {{$user.Name}} </p> </td>
+                                                                <td> <a id="{{$id}}" class="text-info font-weight-bolder badge badge-pill badge-primary historyBtn" style=" font-size: 14px;"> {{$user.Email}} </a></td>
+                                                                <td> <p class="text-dark font-weight-bolder">{{$user.Mobile}} </p></td>
+                                                                <td> <p class="text-dark font-weight-bolder">{{$user.Age}}</p> </td>
+                                                                <td> <p class="text-dark font-weight-bolder">&#36;{{$user.Salary}} </p></td>
+                                                                <td> 
+                                                                
+                                                                    {{if eq $user.Owner "org1" }}
+                                                                        <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org1}} </p>
+                                                                    {{else if eq $user.Owner "org2"}}
+                                                                        <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org2}} </p>
+                                                                    {{else if eq $user.Owner "org3"}}
+                                                                        <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org3}}  </p>
+                                                                    {{else if eq $user.Owner "org4"}}
+                                                                    <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org4}}  </p>
+                                                                    {{end}}  
+                                                                
+                                                                
+                                                                <!--  Form Submission information for Edit, Share and Delete Request -->
+                                                                <!--  Form Submission information for Edit, Share and Delete Request -->
+                                                                <input type="hidden" style="visibility:hidden" id="userId{{$id}}"   name="userId{{$id}}"    value="{{$user.ID}}">																								
+                                                                <input type="hidden" style="visibility:hidden" id="name{{$id}}"     name="name{{$id}}"      value="{{$user.Name}}">
+                                                                <input type="hidden" style="visibility:hidden" id="email{{$id}}"    name="email{{$id}}"     value="{{$user.Email}}">
+                                                                <input type="hidden" style="visibility:hidden" id="mobile{{$id}}"   name="mobile{{$id}}"    value="{{$user.Mobile}}">
+                                                                <input type="hidden" style="visibility:hidden" id="age{{$id}}"      name="age{{$id}}"       value="{{$user.Age}}">
+                                                                <input type="hidden" style="visibility:hidden" id="salary{{$id}}"   name="salary{{$id}}"    value="{{$user.Salary}}">									
+                                                                <input type="hidden" style="visibility:hidden" id="targets{{$id}}"  name="targets{{$id}}"   value="{{$user.Targets}}">											                                                
+                                                                <input type="hidden" style="visibility:hidden" id="role{{$id}}"     name="role{{$id}}"      value="{{$user.Role}}">											
+                                                                <input type="hidden" style="visibility:hidden" id="owner{{$id}}"     name="owner{{$id}}"      value="{{$user.Owner}}">											
+                                                                                    
+                                                            </td>    
+                                                            <td> <p class="text-info font-weight-bolder badge badge-pill badge-default" style=" font-size: 14px;">{{$user.Role}}</p></td>  
+                                                            
+                                                                {{if eq $user.ShareAccess $ALL }}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/edit.png"   id="{{$id}}"  class="edit" data-toggle="modal" data-target="#editModal" width="28" height="28"/></td>											
+                                                                {{else if eq $user.ShareAccess $WRITE}}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/edit.png"   id="{{$id}}"  class="edit" data-toggle="modal" data-target="#editModal" width="28" height="28"/></td>											
+                                                                {{else}}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/block.png"  id="{{$id}}"  width="28" height="28"/></td>											                                            
+                                                                {{end}}
+                                                            
+                                                                {{if eq $user.Owner $SessionOrg}}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/share.png"  id="{{$id}}"  class="share"  value="{{$user.Targets}}" data-toggle="modal" data-target="#shareModal" width="28" height="28"/></td>											
+                                                                {{else}}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/block.png"  id="{{$id}}"  width="28" height="28"/></td>											                                                                                                                                     
+                                                                {{end}}
+
+                                                                {{if eq $user.ShareAccess $ALL}}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/delete.png" id="{{$id}}"  class="delete" value="{{$user.Email}}"  data-toggle="modal" data-target="#deleteModal" width="28" height="28"/></td>       
+                                                                {{else if eq $user.ShareAccess $DELETE}}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/delete.png" id="{{$id}}"  class="delete" value="{{$user.Email}}"  data-toggle="modal" data-target="#deleteModal" width="28" height="28"/></td>       
+                                                                {{else}}
+                                                                        <td><input type="image" style="padding: 5px;" src="/assets/css/images/block.png"  id="{{$id}}"  width="28" height="28"/></td>											                                                                                     
+                                                                {{end}}
+                                                                
+                                                        </tr>
+
+                                                        <!-- ProtoBuf Parser, it is to parse the sharing Org access details and the remarks for the data access -->
+
+                                                    <script>
+                                                    
+                                                        // Org1
+
+                                                            protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                                if (err){
+                                                                    console.log("proto init failed - "+err)
+                                                                }
+                                                                var obj = JSON.parse({{$user.Targets}})
+                                                                var base64_string = obj.org1
+                                                                var target = root.lookupType("model.Target")
+                                                                var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                                var message = target.decode(buffer);
+                                                                var key = {{$id}} +"-org1"
+                                                                tgts[key] = JSON.stringify(message)
+                                                                console.log("Org1 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                            });
+
+                                                        // Org2
+
+                                                            protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                                if (err){
+                                                                    console.log("proto init failed - "+err)
+                                                                }
+                                                                var obj = JSON.parse({{$user.Targets}})
+                                                                var base64_string = obj.org2
+                                                                var target = root.lookupType("model.Target")
+                                                                var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                                var message = target.decode(buffer);
+                                                                var key = {{$id}} +"-org2"
+                                                                tgts[key] = JSON.stringify(message)
+                                                                console.log("Org2 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                            });
+
+                                                        // Org3
+
+                                                            protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                                if (err){
+                                                                    console.log("proto init failed - "+err)
+                                                                }
+                                                                var obj = JSON.parse({{$user.Targets}})
+                                                                var base64_string = obj.org3
+                                                                var target = root.lookupType("model.Target")
+                                                                var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                                var message = target.decode(buffer);
+                                                                var key = {{$id}} +"-org3"
+                                                                tgts[key] = JSON.stringify(message)
+                                                                console.log("Org3 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                            });
+
+                                                        // Org4
+
+                                                            protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                                if (err){
+                                                                    console.log("proto init failed - "+err)
+                                                                }
+                                                                var obj = JSON.parse({{$user.Targets}})
+                                                                var base64_string = obj.org4
+                                                                var target = root.lookupType("model.Target")
+                                                                var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                                var message = target.decode(buffer);
+                                                                var key = {{$id}} +"-org4"
+                                                                tgts[key] = JSON.stringify(message)
+                                                                console.log("Org4 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                            });
+                                                            console.log(" ************************************ ")        
+                                                    
+                                                    </script>
+
+                                        </tbody>
+                                    
+                            {{end}}
+                        </table>
+                    </div>
+                        </div></div>
+                         
+                        {{ else if .User}}
+                            
+                        <div class="flex-center flex-column" style="margin-top: 80px;">
+                            <div class="card border-primary mb-3">
+                                <div class="card-header text-white bg-primary mb-3">
+        
+                                        <span class="font-weight-bold"><i class="fa fa-table" aria-hidden="true"></i> Dashboard</span>
+                                    
+                                </div>
+                        <div class="card-body mb-3">
+                             
+                                <table id="dtBasicExample" class="table table-striped table-bordered" cellspacing="0" width="100%">
+
+                                    <thead>
+                                        <tr>
+                                                <th class="th-sm">Name</th>
+                                                <th class="th-sm">Email</th>
+                                                <th class="th-sm">Mobile</th>
+                                                <th class="th-sm">Age</th>
+                                                <th class="th-sm">Salary</th>
+                                                <th class="th-sm">Company</th>
+                                                <th class="th-sm">Role</th>                                    
+                                                <th class="th-sm">Edit</th>
+                                                <th class="th-sm">Delete</th>					
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+
+
+                                        {{ $user := .SessionUserData }}
+                                                    {{ $id := 0}}
+                                                
+                                                    <tr>
+
+                                                        <td> <p class="text-dark font-weight-bolder"> {{$user.Name}} </p> </td>
+                                                        <td> <a id="{{$id}}" class="text-info font-weight-bolder badge badge-pill badge-primary historyBtn" style=" font-size: 14px;"> {{$user.Email}} </a></td>
+                                                        <td> <p class="text-dark font-weight-bolder">{{$user.Mobile}} </p></td>
+                                                        <td> <p class="text-dark font-weight-bolder">{{$user.Age}}</p> </td>
+                                                        <td> <p class="text-dark font-weight-bolder">&#36;{{$user.Salary}} </p></td>
+                                                        <td> 
+                                                        
+                                                            {{if eq $user.Owner "org1" }}
+                                                                <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org1}} </p>
+                                                            {{else if eq $user.Owner "org2"}}
+                                                                <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org2}} </p>
+                                                            {{else if eq $user.Owner "org3"}}
+                                                                <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org3}}  </p>
+                                                            {{else if eq $user.Owner "org4"}}
+                                                            <p class="text-dark font-weight-bolder badge badge-pill badge-secondary" style=" font-size: 14px;">{{$org4}}  </p>
+                                                            {{end}}  
+                                                        
+                                                        
+                                                        <!--  Form Submission information for Edit, Share and Delete Request -->
+                                                        <!--  Form Submission information for Edit, Share and Delete Request -->
+                                                        <input type="hidden" style="visibility:hidden" id="userId{{$id}}"   name="userId{{$id}}"    value="{{$user.ID}}">																								
+                                                        <input type="hidden" style="visibility:hidden" id="name{{$id}}"     name="name{{$id}}"      value="{{$user.Name}}">
+                                                        <input type="hidden" style="visibility:hidden" id="email{{$id}}"    name="email{{$id}}"     value="{{$user.Email}}">
+                                                        <input type="hidden" style="visibility:hidden" id="mobile{{$id}}"   name="mobile{{$id}}"    value="{{$user.Mobile}}">
+                                                        <input type="hidden" style="visibility:hidden" id="age{{$id}}"      name="age{{$id}}"       value="{{$user.Age}}">
+                                                        <input type="hidden" style="visibility:hidden" id="salary{{$id}}"   name="salary{{$id}}"    value="{{$user.Salary}}">									
+                                                        <input type="hidden" style="visibility:hidden" id="targets{{$id}}"  name="targets{{$id}}"   value="{{$user.Targets}}">											                                                
+                                                        <input type="hidden" style="visibility:hidden" id="role{{$id}}"     name="role{{$id}}"      value="{{$user.Role}}">											
+                                                        <input type="hidden" style="visibility:hidden" id="owner{{$id}}"     name="owner{{$id}}"      value="{{$user.Owner}}">											
+                                                                            
+                                                    </td>    
+                                                    <td> <p class="text-info font-weight-bolder badge badge-pill badge-default" style=" font-size: 14px;">{{$user.Role}}</p></td>  
+                                                    
+                                                        {{if eq $user.ShareAccess $ALL }}
+                                                                <td><input type="image" style="padding: 5px;" src="/assets/css/images/edit.png"   id="{{$id}}"  class="edit" data-toggle="modal" data-target="#editModal" width="28" height="28"/></td>											
+                                                        {{else if eq $user.ShareAccess $WRITE}}
+                                                                <td><input type="image" style="padding: 5px;" src="/assets/css/images/edit.png"   id="{{$id}}"  class="edit" data-toggle="modal" data-target="#editModal" width="28" height="28"/></td>											
+                                                        {{else}}
+                                                                <td><input type="image" style="padding: 5px;" src="/assets/css/images/block.png"  id="{{$id}}"  width="28" height="28"/></td>											                                            
+                                                        {{end}}
+                                                                                                           
+                                                        {{if eq $user.ShareAccess $ALL}}
+                                                                <td><input type="image" style="padding: 5px;" src="/assets/css/images/delete.png" id="{{$id}}"  class="delete" value="{{$user.Email}}"  data-toggle="modal" data-target="#deleteModal" width="28" height="28"/></td>       
+                                                        {{else if eq $user.ShareAccess $DELETE}}
+                                                                <td><input type="image" style="padding: 5px;" src="/assets/css/images/delete.png" id="{{$id}}"  class="delete" value="{{$user.Email}}"  data-toggle="modal" data-target="#deleteModal" width="28" height="28"/></td>       
+                                                        {{else}}
+                                                                <td><input type="image" style="padding: 5px;" src="/assets/css/images/block.png"  id="{{$id}}"  width="28" height="28"/></td>											                                                                                     
+                                                        {{end}}
+                                                        
+                                                </tr>
+
+                                                <!-- ProtoBuf Parser, it is to parse the sharing Org access details and the remarks for the data access -->
+
+                                            <script>
+                                            
+                                                // Org1
+
+                                                    protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                        if (err){
+                                                            console.log("proto init failed - "+err)
+                                                        }
+                                                        var obj = JSON.parse({{$user.Targets}})
+                                                        var base64_string = obj.org1
+                                                        var target = root.lookupType("model.Target")
+                                                        var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                        var message = target.decode(buffer);
+                                                        var key = {{$id}} +"-org1"
+                                                        tgts[key] = JSON.stringify(message)
+                                                        console.log("Org1 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                    });
+
+                                                // Org2
+
+                                                    protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                        if (err){
+                                                            console.log("proto init failed - "+err)
+                                                        }
+                                                        var obj = JSON.parse({{$user.Targets}})
+                                                        var base64_string = obj.org2
+                                                        var target = root.lookupType("model.Target")
+                                                        var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                        var message = target.decode(buffer);
+                                                        var key = {{$id}} +"-org2"
+                                                        tgts[key] = JSON.stringify(message)
+                                                        console.log("Org2 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                    });
+
+                                                // Org3
+
+                                                    protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                        if (err){
+                                                            console.log("proto init failed - "+err)
+                                                        }
+                                                        var obj = JSON.parse({{$user.Targets}})
+                                                        var base64_string = obj.org3
+                                                        var target = root.lookupType("model.Target")
+                                                        var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                        var message = target.decode(buffer);
+                                                        var key = {{$id}} +"-org3"
+                                                        tgts[key] = JSON.stringify(message)
+                                                        console.log("Org3 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                    });
+
+                                                // Org4
+
+                                                    protobuf.load("/assets/target.proto", function(err, root) {
+
+                                                        if (err){
+                                                            console.log("proto init failed - "+err)
+                                                        }
+                                                        var obj = JSON.parse({{$user.Targets}})
+                                                        var base64_string = obj.org4
+                                                        var target = root.lookupType("model.Target")
+                                                        var buffer = Uint8Array.from(atob(base64_string), c => c.charCodeAt(0));
+                                                        var message = target.decode(buffer);
+                                                        var key = {{$id}} +"-org4"
+                                                        tgts[key] = JSON.stringify(message)
+                                                        console.log("Org4 Email = "+{{$user.Email}}+" Key = "+key+" -- "+tgts[key])
+                                                    });
+                                                    console.log(" ************************************ ")        
+                                            
+                                            </script>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                        {{end}}
+
+                 
+                
+            </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--    
+                This Section is the blocks of Modals to show in the UI                                
+            -->
+
+                <!--
+
+                    Edit Modal : This popup will appear when user will click on the edit icon
+
+                -->
+
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+
+                    <div class="modal-dialog modal-notify modal-primary ">   
+
+                            <div class="modal-content">
+
+                                <!-- Header -->
+                                <div class="modal-header">
+                                    
+                                    <span class="modal-title font-weight-bolder white-text" id="editModalLabel">
+                                    <i class="fa fa-random"  aria-hidden="true"></i> Edit </span>
+                                    
+                                    <button type="button" class="close" data-dismiss="modal"> 
+                                        <span aria-hidden="true" class="font-weight-bold white-text">×</span>
+                                        <span class="sr-only">Close</span>						
+                                    </button>										                                                        
+
+                                </div>
+
+                                <!-- Body -->
+
+                                <div class="modal-body">
+
+                                        <p class="text-sm-left text-primary font-weight-bold" style="font-size: 13px;">
+                                                Update <span class="badge badge-pill badge-dark indigo darken-4" id="updateEmailBadge"></span> details </p>
+
+                                    <form name="editForm" action="/edit" method="post">
+
+                                        <div class="form-row mb-4">
+                                                <div class="col">
+                                                    <!-- First name -->
+                                                    <input type="text" id="editName" name="editName"  style="font-family  : Roboto-Regular;	
+                                                        font-size    : 15px;" class="form-control form-control-sm" placeholder="Name" required>
+                                                </div>
+                                                <div class="col">
+                                                    <!-- Age -->
+                                                    <input type="text" id="editAge" name="editAge" style="font-family  : Roboto-Regular;	
+                                                        font-size    : 15px;" class="form-control form-control-sm" placeholder="Age" required>
+                                                </div>
+                                            </div>
+    
+                                            <!-- E-mail -->
+                                            <input type="email" id="editEmail" name="editEmail" readonly="readonly" style="font-family  : Roboto-Regular;	
+                                            font-size    : 15px;" class="form-control mb-4 form-control-sm" placeholder="E-mail" required>
+                                            
+                                            <!-- Phone number -->
+                                            <input type="text" id="editMobile" name="editMobile" style="font-family  : Roboto-Regular;	
+                                            font-size    : 15px;" class="form-control mb-4 form-control-sm" placeholder="Phone number">			 
+                                
+                                            <!-- Salary -->
+                                            <input type="text" id="editSalary" name="editSalary" style="font-family  : Roboto-Regular;	
+                                            font-size    : 15px;" class="form-control mb-4 form-control-sm" placeholder="Salary" required>			 
+                                            
+                                            <!-- User Id -->
+                                            <input type="hidden" style="visibility:hidden" id="editUserId" name="editUserId" class="form-control mb-4 form-control-sm">			 
+                                            
+                                            <!-- Target -->
+                                            <input type="hidden" style="visibility:hidden" id="editTarget" name="editTarget" class="form-control mb-4 form-control-sm">			 
+                                            
+                                            <!-- Role -->
+                                            <input type="hidden" style="visibility:hidden" id="editRole" name="editRole">
+    
+                                            <!-- Creator Role -->
+                                            <input type="hidden" style="visibility:hidden" id="editCreatorRole" name="editCreatorRole" value="{{ $SessionUser.Role}}">
+
+                                            <!-- Sign up button -->
+                                            <input type="hidden" name="editSubmitted" value="true">
+                                                                                    
+                                    </form>
+                                </div>
+
+                                <!-- Footer -->
+                                <div class="modal-footer">
+                                    <div class="spinner-border text-success" style="visibility:hidden" id="editloading" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm waves-effect editBtn">Save changes</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                
+
+                 <!--
+
+                    Share Modal : This popup will appear, when user will click on the share icon
+
+                -->
+
+                <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+
+                    <div class="modal-dialog modal-notify modal-info">
+
+                        <div class="modal-content">
+
+                            <!-- Header -->
+                            <div class="modal-header">
+                                <span class="modal-title font-weight-bolder white-text" id="shareModalLabel">
+                                <i class="fa fa-share-alt" aria-hidden="true"></i> Share </span>
+                                <button type="button" class="close" data-dismiss="modal"> 
+                                <span aria-hidden="true" class="font-weight-bold white-text">×</span>
+                                <span class="sr-only">Close</span>
+                                </button>										                                    
+                            </div>
+
+                            <!-- Body -->
+                            <div class="modal-body">
+
+                                <div class="form-group">
+                                
+                                    <div class="table-responsive-sm">
+
+                                    
+                                        <p class="text-sm-left text-primary font-weight-bold" style="font-size: 13px;">
+                                            In order to access <span class="badge badge-pill badge-danger" id="emailBadge"></span> data, Please apply data sharing access query for the below company</p>
+    
+                                            <form name="shareForm" action="/share" method="post">
+    
+                                                <table class="table table-sm table-bordered table-striped" style="margin-top: 20px;">
+
+                                                        <thead class="black white-text">													
+                                                            <tr>					
+                                                                <th class="th-sm font-weight-bolder" scope="col">Company</th>
+                                                                <th class="th-sm font-weight-bolder" scope="col">Access</th>
+                                                            </tr>										
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                     
+                                                                {{range $id, $org := .SharingOrgs}}
+                                                                
+                                                                    <tr>
+                                                                        <td class="font-weight-bolder"> 
+                                                                            {{if eq $org "org1" }}
+                                                                                {{$org1}} 
+                                                                            {{else if eq $org "org2"}}
+                                                                                {{$org2}} 
+                                                                            {{else if eq $org "org3"}}
+                                                                                {{$org3}} 
+                                                                            {{else if eq $org "org4"}}
+                                                                                {{$org4}} 
+                                                                            {{end}}
+                                                                        </td>
+                                                                        <td> 
+                                                                            <select class="browser-default custom-select" style="font-family  : Roboto-Regular; font-size: 15px;" id="{{$org}}" name="{{$org}}"> 
+                                                                                <option id="6{{$org}}" value="6">Grant Access</option>					
+                                                                                <option id="1{{$org}}" value="1">All</option>
+                                                                                <option id="2{{$org}}" value="2">Write</option>
+                                                                                <option id="3{{$org}}" value="3">Read</option>
+                                                                                <option id="4{{$org}}" value="4">Delete</option>
+                                                                                <option id="5{{$org}}" value="5">Remove</option>
+                                                                            </select>
+                                                                        </td>
+                                                                    </tr>                                                                            
+                                                                {{end}}
+                                                        </tbody>
+                                                </table>
+
+                                                <input type="hidden" style="visibility:hidden" id="shareEmail" name="shareEmail">
+                                                <input type="hidden" style="visibility:none" id="shareRole" name="shareRole" value="{{ $SessionUser.Role}}">                                                            
+                                                <input type="hidden" name="shareSubmitted" value="true">
+                                        
+                                            </form>                                                                
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <div class="spinner-border text-info" style="visibility:hidden" id="shareloading" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm waves-effect shareBtn">Save changes</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- 
+
+                    Delete Modal: This popup will appear, when user will click on the delete icon
+
+                -->
+
+                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+
+                    <div class="modal-dialog modal-notify modal-danger">
+
+                        <div class="modal-content">
+
+                            <!-- Header -->
+                            <div class="modal-header">
+                                <span class="modal-title font-weight-bolder white-text" id="deleteModalLabel">
+                                <i class="fa fa-trash"></i> Delete </span>
+                                <button type="button" class="close" data-dismiss="modal"> 
+                                <span aria-hidden="true" class="font-weight-bold white-text">×   </span>
+                                <span class="sr-only">Close</span>						
+                                </button>										                                                        
+                            </div>
+
+                            <!-- Body -->
+
+                            <div class="modal-body">
+
+                                <form name="deleteForm" action="/delete" method="post">
+                                 
+                                    <p class="text-sm-left text-danger font-weight-bolder" style="font-size: 13px;">
+                                            Are you sure, you want to delete <span class="badge badge-pill badge-danger" id="deleteEmailBadge"></span> </p>
+                                        <input type="hidden" style="visibility:hidden" id="deleteEmail" name="deleteEmail">
+                                        <input type="hidden" style="visibility:hidden" id="deleteOwner" name="deleteOwner">  
+                                        <input type="hidden" style="visibility:hidden" id="deleteTargets" name="deleteTargets">
+                                        <input type="hidden" style="visibility:hidden" id="deleteRole" name="deleteRole">
+                                        <input type="hidden" style="visibility:hidden" id="deleteCreatorRole" name="deleteCreatorRole" value="{{ $SessionUser.Role}}">                                                   
+                                        <input type="hidden" name="deleteSubmitted" value="true">
+                           
+
+                                </form>
+                            </div>
+
+                            <!-- Footer -->
+
+                            <div class="modal-footer">
+                                <div class="spinner-border text-danger" style="visibility:hidden" id="deleteloading" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-outline-danger btn-sm waves-effect deleteBtn">Delete user</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- History Page Navigation -->
+                <form name="historyForm" action="/history.html" method="post">				
+                    <input type="hidden" name="historySubmitted" value="true">
+                    <input type="text" style="visibility:hidden" id="historyEmail" name="historyEmail">                                    
+                </form>
+              
+                <!-- Change Password Page Navigation -->
+                <form name="changePwdForm" action="/change_password.html" method="post">
+                    <input type="hidden" name="openChangePwdSubmitted" value="true">	
+                </form>
+
+   
+
+
+                <!-- Javascript Click event handlers -->
+
+                <script type="text/javascript">
+                
+                    var tgts = {}; //store protobuf parsing details per organization
+
+                    $(document).ready(function () {
+
+                        /* User details Datatable */
+                        $('#dtBasicExample').DataTable();
+						$('.dataTables_length').addClass('bs-select');
+
+                        /* Edit Icon Click Event  */
+                        $(".edit").click(function() {
+
+                            var uid = "userId"+$(this).attr("id")
+							var userId = $("#"+uid).val();
+
+							var nid = "name"+$(this).attr("id")
+							var name = $("#"+nid).val();
+							
+							var aid = "age"+$(this).attr("id")
+							var age = $("#"+aid).val();
+
+							var eid = "email"+$(this).attr("id")
+							var email = $("#"+eid).val();
+							
+							var mid = "mobile"+$(this).attr("id")
+							var mobile = $("#"+mid).val();
+							
+							var sid = "salary"+$(this).attr("id")
+							var salary = $("#"+sid).val();
+						
+                            var rlid = "role"+$(this).attr("id")
+							var role = $("#"+rlid).val();
+
+                            var tgid = "targets"+$(this).attr("id")
+							var target = $("#"+tgid).val();
+
+                            var owid = "owner"+$(this).attr("id")
+							var owner = $("#"+owid).val();
+
+							
+							console.log(" Edit Id = "+uid+" == "+userId)
+							console.log(" Edit Name = "+nid+" == "+name)
+							console.log(" Edit Age = "+aid+" == "+age)
+							console.log(" Edit Email = "+eid+" == "+email)
+							console.log(" Edit Mobile = "+mid+" == "+mobile)
+							console.log(" Edit Salary = "+sid+" == "+salary)
+							console.log(" Edit Targets = "+tgid+" == "+target)
+                            console.log(" Edit Role = "+rlid+" == "+role)
+                            console.log(" Edit Owner = "+owner+" == "+owner)
+
+                            document.getElementById('editUserId').value = userId
+							document.getElementById('editName').value = name
+							document.getElementById('editAge').value = age
+							document.getElementById('editEmail').value = email
+							document.getElementById('editMobile').value = mobile
+							document.getElementById('editSalary').value = salary
+
+                            document.getElementById('editTarget').value = target
+                            document.getElementById('editRole').value = role
+                            document.getElementById("editloading").style.visibility = "hidden";
+                            document.getElementById("updateEmailBadge").textContent=email;
+                        
+                        });
+
+                        /* Edit Modal 'Save Changes' button Click */
+                        $('.editBtn').click(function() {
+
+                            var userId = document.getElementById('editUserId').value
+							var name = document.getElementById('editName').value
+							var age = document.getElementById('editAge').value
+							var email = document.getElementById('editEmail').value
+							var mobile = document.getElementById('editMobile').value
+							var salary = document.getElementById('editSalary').value
+
+                            var target = document.getElementById('editTarget').value
+                            var role = document.getElementById('editRole').value
+
+
+							console.log(" UserId == "+userId)
+							console.log(" Name == "+name)
+							console.log(" Age == "+age)
+							console.log(" Email == "+email)
+							console.log(" Mobile == "+mobile)
+							console.log(" Salary == "+salary)
+                            console.log(" Target == "+target)
+						    console.log(" Role == "+role)
+                            document.getElementById("editloading").style.visibility = "visible";
+
+                            /* Edit Modal Form Submission */
+							$('form[name="editForm"]').submit();
+                        });
+
+                        /* Share Icon Click event */
+                        $(".share").click(function() {
+
+                            //var orgs = {{.SharingOrgs}}
+                            var eid = "email"+$(this).attr("id")
+                            var email = $("#"+eid).val();
+
+                            var sessionOrg = $("#sessionOrg").val();
+							var targets = $(this).val();
+
+                            console.log(" SessionOrg = "+sessionOrg)
+							console.log(" Emails = "+email)
+							console.log(" Targets = "+targets)
+ 
+
+                           
+                            
+                            document.getElementById("emailBadge").textContent=email;
+                            document.getElementById("shareEmail").value = email
+                            document.getElementById("shareloading").style.visibility = "hidden";
+                            
+                            var orgs = ["org1", "org2", "org3", "org4"]
+                            var obj = JSON.parse(targets)
+							var tg = JSON.stringify(obj)
+
+                            var keyO1 = $(this).attr("id")+"-org1"
+							var keyO2 = $(this).attr("id")+"-org2"
+							var keyO3 = $(this).attr("id")+"-org3"
+							var keyO4 = $(this).attr("id")+"-org4"
+
+							console.log("Org1 -- "+keyO1+" -- "+tgts[keyO1])
+							console.log("Org2 -- "+keyO2+" -- "+tgts[keyO2])
+							console.log("Org3 -- "+keyO3+" -- "+tgts[keyO3])
+							console.log("Org4 -- "+keyO4+" -- "+tgts[keyO4])
+
+							console.log("Parse Targets - "+tg)	
+
+                            $.each(orgs, function(i, org) {
+
+                                if (sessionOrg != org) {
+
+                                    var tglist
+                                    if (org == "org1"){
+                                        tglist = tgts[keyO1]
+                                    } else if (org == "org2"){
+                                        tglist = tgts[keyO2]
+                                    } else if (org == "org3"){
+                                        tglist = tgts[keyO3]
+                                    } else if (org == "org4"){
+                                        tglist = tgts[keyO4]
+                                    }
+                                    var n = i+1
+                                    var access = JSON.parse(tglist).access
+
+                                    if (access == 5) { // 5: Remove Access ,  6: No Access 
+                                        document.getElementById("6"+org).selected = true
+                                    } else {
+                                        document.getElementById(access+org).selected = true
+                                    }															
+                                }
+
+                            });
+                        });
+
+                        /* Share Modal 'Save Changes' button Click event */
+                        $('.shareBtn').click(function() {
+
+                            console.log(" Share Btn Click")
+                            var shareEmail = document.getElementById('shareEmail').value;
+                            console.log(" Share Email -- "+shareEmail)
+                                                
+                            document.getElementById("shareloading").style.visibility = "visible";
+
+                            $('form[name="shareForm"]').submit();
+                        });
+                         
+                        /* Delete Icon Click event */
+                        $(".delete").click(function() {
+
+                            var tgid = "targets"+$(this).attr("id")
+							var target = $("#"+tgid).val();
+
+                            var eid = "email"+$(this).attr("id")
+							var email = $("#"+eid).val();
+
+                            var rlid = "role"+$(this).attr("id")
+							var role = $("#"+rlid).val();
+
+                            var owid = "owner"+$(this).attr("id")
+							var owner = $("#"+owid).val();
+
+							console.log(" Delete Email = "+eid+" == "+email)
+
+							document.getElementById('deleteEmail').value = email
+                            document.getElementById('deleteOwner').value = owner
+                            document.getElementById('deleteTargets').value = target                            
+                            document.getElementById('deleteRole').value = role
+							document.getElementById("deleteEmailBadge").textContent = email;
+                            document.getElementById("deleteloading").style.visibility = "hidden";
+
+                        });
+
+                        /* Delete Modal Delete user button Click event */
+                        $('.deleteBtn').click(function() {
+
+                            console.log(" Delete Btn Click")
+							var email = document.getElementById('deleteEmail').value
+                            var owner = document.getElementById('deleteOwner').value                            
+                            var role = document.getElementById('deleteRole').value
+							console.log(" Delete Email == "+email)
+                            console.log(" Delete Owner == "+owner)
+                            console.log(" Delete Role == "+role)
+                            document.getElementById("deleteloading").style.visibility = "visble";
+
+							$('form[name="deleteForm"]').submit();
+
+                        });
+
+                        /* History by Email Click event*/
+                        $('.historyBtn').click(function() {
+
+                            console.log(" History Btn Click")
+
+                            var eid = "email"+$(this).attr("id")
+                            var email = $("#"+eid).val();
+
+                            document.getElementById('historyEmail').value = email
+                            var hEmail = document.getElementById('historyEmail').value
+
+                            console.log(" Email == "+email)
+                            console.log(" History Email == "+hEmail)
+
+                            $('form[name="historyForm"]').submit();
+
+                        });
+
+
+                        /* Change Password button Click event */
+                        $('.changePwdBtn').click(function() {
+							console.log(" ChangePwd Btn Click")
+
+							$('form[name="changePwdForm"]').submit();
+							
+						});
+
+                    });
+                
+                </script>
+
+    {{ else }}
+
+        <!-- Show No Response Message !-->
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>You are not supposed to be here - </strong> 
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+    {{ end }}
+
+
+    {{end}}    
+
+{{end}}

@@ -1,0 +1,12 @@
+.bg-gdpr{
+    background-color:#003399!important
+}
+a.bg-gdpr:focus,
+a.bg-gdpr:hover,
+button.bg-gdpr:focus,
+button.bg-gdpr:hover{
+    background-color:#003399!important
+}
+.border-gdpr{
+    border-color:#003399!important
+}

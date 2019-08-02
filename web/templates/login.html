@@ -1,0 +1,100 @@
+{{define "body"}}
+
+<title>Login</title>
+
+<header>
+			
+		<nav class="navbar fixed-top navbar-expand-md navbar-dark black mdb-color mb-5">
+				  
+			<div class="mr-auto">
+					 
+				<nav aria-label="breadcrumb">
+						<a class="navbar-brand">
+							<img src="/assets/css/images/logo_fabric.png" width="30" height="25"/>					
+						</a>  
+						<ol class="breadcrumb d-inline-flex pl-0 pt-0">
+					<li class="breadcrumb-item"><a class="white-text font-weight-bolder"><span class="font-weight-bold">Private Ledger</span></a></li>
+					</ol>
+				</nav>
+											  
+			</div>
+
+			 
+			 
+		</nav>
+					
+</header>
+
+<div style="height: 105vh">
+	<div class="flex-center flex-column">
+
+		{{ if .Response }}
+					
+				{{ if .Success }}
+
+
+
+				{{end}}
+
+				{{ if .Error }}
+
+					<div class="alert alert-indigo indigo darken-4 alert-dismissible  text-white fade show" role="alert">
+							<strong>Login Failed - </strong> {{ .ErrorMsg}}
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span class= "text-white" aria-hidden="true">&times;</span>
+							</button>
+					</div>
+					
+				{{end}}
+		{{ end }}
+
+		<div class="card border-dark">
+
+			<div class="card-header text-white bg-dark mb-3">
+
+				<span class="font-weight-bolder">Login to Private Ledger</span>
+					
+			</div>
+
+			<div class="card-body border-secondary mb-3">
+			<!-- Default form login -->
+				<form class="text-center p-3" action="/login.html" method="post">
+					
+					
+
+					<!-- E-mail -->
+					<input type="email" id="email" name="email" style="font-family  : Roboto-Regular;	
+					font-size    : 15px;" class="form-control mb-4 form-control-sm" placeholder="E-mail" required>
+
+					<!-- Password -->
+					<input type="password" id="password" name="password" class="form-control mb-4 form-control-sm" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" required name="password">
+				
+					<!-- Company -->
+					<select class="browser-default custom-select" style="font-family  : Roboto-Regular;	
+					font-size    : 15px;" name="company">
+						<option selected>Choose Company</option>
+						<option value="org1">{{ .CustomOrg1}}</option>
+						<option value="org2">{{ .CustomOrg2}}</option>
+						<option value="org3">{{ .CustomOrg3}}</option>
+						<option value="org4">{{ .CustomOrg4}}</option>
+					</select>	 
+
+				
+					<!-- Sign in button -->
+					<input type="hidden" name="signinSubmitted" value="true">
+					<button class="btn btn-indigo darken-4 btn-block my-4" type="submit">Sign In</button>
+				
+					<!-- Register -->
+					<p>Not a member?
+						<a href="/register.html">Register</a>
+					</p>
+						
+				</form>
+			</div>	
+		</div>		
+	</div>
+</div>
+ 
+		
+
+{{ end }}
