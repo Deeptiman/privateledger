@@ -1,2 +1,3 @@
-web/assets/* linguist-vendored
-web/templates/* linguist-vendored
+*.js linguist-vendored
+*.html linguist-vendored
+*.css linguist-vendored
