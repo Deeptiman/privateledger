@@ -4,11 +4,11 @@ package model
 type LedgerAccess int32
 
 const (
-	ALL					LedgerAccess = 1
+	ALL				LedgerAccess = 1
 	WRITE				LedgerAccess = 2	
 	READ 				LedgerAccess = 3
 	DELETE				LedgerAccess = 4
-	REMOVEACCESS		LedgerAccess = 5
+	REMOVEACCESS			LedgerAccess = 5
 	NOACCESS 			LedgerAccess = 6	 
 )
 
