@@ -112,17 +112,17 @@ func (t *PrivateLedgerChaincode) updateUserData(stub shim.ChaincodeStubInterface
 		model.LedgerAccess(access).AllAccess()) {
 
 			userdata := &model.User{
-				ID: 			user.ID, 
-				Name: 			name, 
-				Email: 			user.Email, 
-				Mobile: 		mobile, 
-				Age: 			age, 
-				Salary: 		salary,
-				Owner:  		user.Owner,
+				ID: 		user.ID, 
+				Name: 		name, 
+				Email: 		user.Email, 
+				Mobile: 	mobile, 
+				Age: 		age, 
+				Salary: 	salary,
+				Owner:  	user.Owner,
 				ShareAccess: 	user.ShareAccess,
-				Role:			user.Role,
-				Time:  			user.Time,	
-				Targets: 		user.Targets,
+				Role:		user.Role,
+				Time:  		user.Time,	
+				Targets: 	user.Targets,
 			}
 
 			userDataJSONasBytes, err := json.Marshal(userdata)
@@ -142,10 +142,10 @@ func (t *PrivateLedgerChaincode) updateUserData(stub shim.ChaincodeStubInterface
 			}
 			
 			fmt.Println(" ###### Update Data Parameters ###### ")
-			fmt.Println(" Email			= "+email)
-			fmt.Println(" Name 			= "+name)
+			fmt.Println(" Email		= "+email)
+			fmt.Println(" Name 		= "+name)
 			fmt.Println(" Mobile 		= "+mobile)
-			fmt.Println(" Age			= "+age)
+			fmt.Println(" Age		= "+age)
 			fmt.Println(" Salary 		= "+salary)
 			fmt.Println(" ################################## ")
 
@@ -228,17 +228,17 @@ func (t *PrivateLedgerChaincode) updateTarget(stub shim.ChaincodeStubInterface, 
 	}
 	
 	updateUser := &model.User{ 
-		ID: 			user.ID, 
-		Name: 			user.Name, 
-		Email: 			user.Email, 
-		Mobile: 		user.Mobile, 
-		Age: 			user.Age, 
-		Salary: 		user.Salary,
-		Owner:  		user.Owner,
+		ID: 		user.ID, 
+		Name: 		user.Name, 
+		Email: 		user.Email, 
+		Mobile: 	user.Mobile, 
+		Age: 		user.Age, 
+		Salary: 	user.Salary,
+		Owner:  	user.Owner,
 		ShareAccess: 	user.ShareAccess,
-		Role:			user.Role,
-		Time:  			user.Time,			
-		Targets: 		targets,
+		Role:		user.Role,
+		Time:  		user.Time,			
+		Targets: 	targets,
 	}
 
 	userDataJSONasBytes, err := json.Marshal(updateUser)
