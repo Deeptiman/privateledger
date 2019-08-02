@@ -52,29 +52,29 @@ type OrgSetup struct {
 	ChainCodeVersion 	  string
 	ChainCodePolicy		  string	
 	
-	CCPkg    			  *resource.CCPackage
+	CCPkg    		  *resource.CCPackage
 	
 
-	ConfigFile       	  		string
-	OrgCaID				  		string
-	OrgName				  		string
-	OrgAdmin			  		string
-	UserName			  		string
-	OrgCollection		  		string
-	OrgCollectionPolicy		  	string
+	ConfigFile       	  	string
+	OrgCaID				string
+	OrgName				string
+	OrgAdmin			string
+	UserName			string
+	OrgCollection		  	string
+	OrgCollectionPolicy		string
 	OrgCollectionConfig   		*cb.CollectionConfig
 	
-	Sdk             	  *fabsdk.FabricSDK
-	CaClient        	  *caMsp.Client
-	Resmgmt				  *resmgmt.Client
-	Ctx					  contextAPI.ClientProvider
-	MspClient			  *mspclient.Client
-	Peers				  []fabAPI.Peer
-	ChannelContext 		  contextAPI.ChannelProvider
-	ChannelClient   	  *channel.Client
-	Event 			  	  *event.Client
-	SigningIdentity		  msp.SigningIdentity	
-	SigningIdentities 	  []msp.SigningIdentity
+	Sdk             	  	*fabsdk.FabricSDK
+	CaClient        	  	*caMsp.Client
+	Resmgmt				*resmgmt.Client
+	Ctx				contextAPI.ClientProvider
+	MspClient			*mspclient.Client
+	Peers				[]fabAPI.Peer
+	ChannelContext 		  	contextAPI.ChannelProvider
+	ChannelClient   	  	*channel.Client
+	Event 			  	*event.Client
+	SigningIdentity		  	msp.SigningIdentity	
+	SigningIdentities 	  	[]msp.SigningIdentity
 }
 
 
@@ -162,22 +162,22 @@ func initializeOrg(obj OrgSetup) (*OrgSetup,error) {
 			ChainCodeVersion: 		ccVersion,
 			ChainCodePolicy:		ccPolicy,	
 			OrdererName:			ordererName,
-			OrdererID:				ordererId,
+			OrdererID:			ordererId,
 			ChannelClient:			nil,
-			Event:					nil,
-			OrgCaID:			  	obj.OrgCaID,
-			OrgName:				obj.OrgName,
-			OrgAdmin:			  	obj.OrgAdmin,
+			Event:				nil,
+			OrgCaID:			obj.OrgCaID,
+			OrgName:			obj.OrgName,
+			OrgAdmin:			obj.OrgAdmin,
 			OrgCollection:		  	obj.OrgCollection,
-			OrgCollectionConfig:	collCfg,
+			OrgCollectionConfig:		collCfg,
 			ChannelConfig:		  	getArtifactPath()+obj.ChannelConfig,
-			Sdk: 			 		sdk,
-			CaClient: 		 		caClient,
-			Ctx: 			 		orgCtx,
-			Resmgmt: 		 		resMgmtClient,
-			MspClient: 		 		mspClient,
+			Sdk: 			 	sdk,
+			CaClient: 		 	caClient,
+			Ctx: 			 	orgCtx,
+			Resmgmt: 		 	resMgmtClient,
+			MspClient: 		 	mspClient,
 			SigningIdentities:		signingIdentities,
-			Peers: 			 		orgPeers,
+			Peers: 			 	orgPeers,
 			ChannelContext:  		channelCtx,			
 		}, nil
 }
