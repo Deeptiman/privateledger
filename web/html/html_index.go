@@ -20,35 +20,35 @@ type Data struct {
 	Admin        			bool
 	User         			bool
 
-	SessionOrg	 			string	
-	SessionUserData     	*model.User
+	SessionOrg	 		string	
+	SessionUserData     		*model.User
 
 	AllUsersData 			[]model.User
-	SharingOrgs		 		[]string
+	SharingOrgs		 	[]string
 	
 	AllHistoryData 			[]model.HistoryData
-	HistoryUser				string
-	History					bool
+	HistoryUser			string
+	History				bool
 
-	ShareUser	 			string 		 
-	Share		 			bool
+	ShareUser	 		string 		 
+	Share		 		bool
 
-	UpdateUser				string
-	Update					bool
+	UpdateUser			string
+	Update				bool
 
-	DeleteUser				string
-	Delete					bool
+	DeleteUser			string
+	Delete				bool
 
-	Logout					bool
+	Logout				bool
 
-	ALL 					string
-	WRITE					string
-	DELETE					string
+	ALL 				string
+	WRITE				string
+	DELETE				string
 
-	CustomOrg1				string
-	CustomOrg2				string
-	CustomOrg3				string
-	CustomOrg4				string
+	CustomOrg1			string
+	CustomOrg2			string
+	CustomOrg3			string
+	CustomOrg4			string
 
 }
 
@@ -134,14 +134,14 @@ func(data *Data) Setup(orgUser *org.OrgUser, needHistory bool) (*Data, error){
 		Response:    		data.Response,
 		Admin:        		data.Admin,
 		User:         		data.User,
-		SessionOrg:	  		data.SessionOrg,
+		SessionOrg:	  	data.SessionOrg,
 		SessionUserData: 	data.SessionUserData,			
 		AllUsersData: 		data.AllUsersData,
 		SharingOrgs:	  	data.SharingOrgs,
-		CustomOrg1:			model.GetCustomOrgName("org1"),
-		CustomOrg2:			model.GetCustomOrgName("org2"),
-		CustomOrg3:			model.GetCustomOrgName("org3"),
-		CustomOrg4:			model.GetCustomOrgName("org4"),
+		CustomOrg1:		model.GetCustomOrgName("org1"),
+		CustomOrg2:		model.GetCustomOrgName("org2"),
+		CustomOrg3:		model.GetCustomOrgName("org3"),
+		CustomOrg4:		model.GetCustomOrgName("org4"),
 	}, nil
 
 }
