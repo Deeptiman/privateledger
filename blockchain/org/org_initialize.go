@@ -65,13 +65,13 @@ func(s *OrgSetup) InitializeOrg(org string) (OrgSetup,error) {
 		case "org1":
 
 			obj = OrgSetup {
-				OrgAdmin: 				"Admin",
-				OrgName:  				"org1",
+				OrgAdmin: 			"Admin",
+				OrgName:  			"org1",
 				ConfigFile: 			"config-org1.yaml",
-				OrgCaID: 				"ca.org1.private.ledger.com",
+				OrgCaID: 			"ca.org1.private.ledger.com",
 				ChannelConfig: 			"Org1MSPanchors.tx",
 				OrgCollection: 			"collectionOrg1",
-				OrgCollectionPolicy: 	"OR ('Org1MSP.member')",
+				OrgCollectionPolicy: 		"OR ('Org1MSP.member')",
 			}
 		
 			break
@@ -79,13 +79,13 @@ func(s *OrgSetup) InitializeOrg(org string) (OrgSetup,error) {
 		case "org2":
 
 			obj = OrgSetup {
-				OrgAdmin: 				"Admin",
-				OrgName:  				"org2",
+				OrgAdmin: 			"Admin",
+				OrgName:  			"org2",
 				ConfigFile: 			"config-org2.yaml",
-				OrgCaID: 				"ca.org2.private.ledger.com",
+				OrgCaID: 			"ca.org2.private.ledger.com",
 				ChannelConfig: 			"Org2MSPanchors.tx",
 				OrgCollection: 			"collectionOrg2",
-				OrgCollectionPolicy: 	"OR ('Org2MSP.member')",
+				OrgCollectionPolicy: 		"OR ('Org2MSP.member')",
 			}
 			 
 			break
@@ -93,13 +93,13 @@ func(s *OrgSetup) InitializeOrg(org string) (OrgSetup,error) {
 		case "org3":
 
 			obj = OrgSetup {
-				OrgAdmin: 				"Admin",
-				OrgName:  				"org3",
+				OrgAdmin: 			"Admin",
+				OrgName:  			"org3",
 				ConfigFile: 			"config-org3.yaml",
-				OrgCaID: 				"ca.org3.private.ledger.com",
+				OrgCaID: 			"ca.org3.private.ledger.com",
 				ChannelConfig: 			"Org3MSPanchors.tx",
 				OrgCollection: 			"collectionOrg3",
-				OrgCollectionPolicy: 	"OR ('Org3MSP.member')",
+				OrgCollectionPolicy: 		"OR ('Org3MSP.member')",
 			}
 			 
 			break
@@ -107,13 +107,13 @@ func(s *OrgSetup) InitializeOrg(org string) (OrgSetup,error) {
 		case "org4":
 
 			obj = OrgSetup {
-				OrgAdmin: 				"Admin",
-				OrgName:  				"org4",
+				OrgAdmin: 			"Admin",
+				OrgName:  			"org4",
 				ConfigFile: 			"config-org4.yaml",
-				OrgCaID: 				"ca.org4.private.ledger.com",
+				OrgCaID: 			"ca.org4.private.ledger.com",
 				ChannelConfig: 			"Org4MSPanchors.tx",
 				OrgCollection: 			"collectionOrg4",
-				OrgCollectionPolicy: 	"OR ('Org4MSP.member')",
+				OrgCollectionPolicy: 		"OR ('Org4MSP.member')",
 			} 
 
 			break	 
@@ -131,8 +131,8 @@ func(s *OrgSetup) InitializeOrg(org string) (OrgSetup,error) {
 func InitiateOrderer() (OrgSetup,error) {
 
 	obj := OrgSetup {
-		OrgAdmin: 				"Admin",
-		OrgName:  				"OrdererOrg",
+		OrgAdmin: 			"Admin",
+		OrgName:  			"OrdererOrg",
 		ConfigFile: 			"config-org1.yaml",
 		ChannelConfig: 			"privateledger.channel.tx",
 	}
