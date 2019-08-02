@@ -16,8 +16,8 @@ var secretKey = make(map[string]string)
 type OrgUser struct {
 	Username        	string
 	ChannelClient   	*channel.Client
-	Event				*event.Client
-	Setup	 			OrgSetup
+	Event			*event.Client
+	Setup	 		OrgSetup
 }
 
 var sessionOrgUser *OrgUser
@@ -146,8 +146,8 @@ func(s *OrgSetup) RegisterUserWithCA(org, email, password, role string) (*OrgUse
 
 	orgSetup := s.ChooseORG(org)
 
-	caid  	  =		orgSetup.OrgCaID 
-	caClient :=  	orgSetup.CaClient
+	caid  	  =  orgSetup.OrgCaID 
+	caClient :=  orgSetup.CaClient
 
 	fmt.Println("CA Register Org      === " + org)
 	fmt.Println("CA Register CaID     === " + caid)
