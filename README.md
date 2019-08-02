@@ -1,6 +1,30 @@
 <h1>Private Ledger</h1>
 <p><a href="https://www.hyperledger.org/projects/fabric"><img src="https://www.hyperledger.org/wp-content/uploads/2016/09/logo_hl_new.png" alt="N|Solid"></a></p>
 <p>Private Ledger is a web application written in Go to demonstrate storing private data in  Hyperleder fabric multi-org environment. The blockchain network consists of four organization joined with a single channel. The ledger data created in private collection, so that the data only accessible to the related organization unless the collection data is shared to other organization. And also, this repo will be demonstrate sharing the private collection data among the organizations.</p>
+<p> However, this explanation guide does not explain how Hyperledger Fabric works, so for the information, you can follow at <a href="https://www.hyperledger.org/projects/fabric">Hyperledger.</a> </p>
+
+<h4><a id="Installation_6"></a>Installation</h4>
+<p>Private Ledger requires <a href="https://www.docker.com/">Docker</a> &amp; <a href="https://golang.org/">Go</a> to run.</p>
+<h3><a id="Docker_10"></a>Docker</h3>
+<pre><code class="language-sh">$ sudo apt install docker.io
+$ sudo apt install docker-compose
+</code></pre>
+<h2><a id="Go_15"></a>Go</h2>
+<h4><a id="Installation_16"></a>Installation</h4>
+<pre><code class="language-sh">$ sudo apt-get update
+$ sudo apt-get install golang-go
+</code></pre>
+<h4><a id="Set_your_Go_path_as_environmental_variable_21"></a>Set your Go path as environmental variable</h4>
+<h6><a id="add_these_following_variable_into_the_profile_22"></a>add these following variable into the profile</h6>
+<pre><code class="language-sh">$ <span class="hljs-built_in">export</span> GOPATH=<span class="hljs-variable">$HOME</span>/go
+$ <span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:/usr/<span class="hljs-built_in">local</span>/go/bin:<span class="hljs-variable">$GOPATH</span>/bin
+</code></pre>
+<h6><a id="then_27"></a>then</h6>
+<pre><code class="language-sh">$ <span class="hljs-built_in">source</span> ~/.profile
+$ go version
+$ go version go1.<span class="hljs-number">11</span> linux/amd64
+</code></pre>
+
 <h4>Setup the Config</h4>
 <ul>
 <li>
