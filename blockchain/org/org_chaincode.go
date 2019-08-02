@@ -120,7 +120,7 @@ func(s *OrgSetup) InstantiateCCForOrg(orgPeers []fab.Peer) error {
 			Version: 	s.ChainCodeVersion,
 			Args:    	[][]byte{[]byte("init")},
 			Policy:  	ccPolicy,
-			CollConfig: cfg,
+			CollConfig: 	cfg,
 
 	},resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithTargets(orgPeers[0], orgPeers[1]))
 
@@ -170,7 +170,7 @@ func(s *OrgSetup) UpgradeCCForOrg(orgPeers []fab.Peer) error {
 		Path: 		s.ChaincodePath, 
 		Args:  		[][]byte{[]byte("init")},
 		Policy: 	ccPolicy,
-		CollConfig: cfg,		
+		CollConfig: 	cfg,		
 	}
 
 	resp, err := s.Resmgmt.UpgradeCC(s.ChannelID, req, resmgmt.WithRetry(retry.DefaultResMgmtOpts),resmgmt.WithTargets(orgPeers[0], orgPeers[1]))
@@ -380,10 +380,10 @@ func(s *OrgSetup) TestInvoke(org string) error {
 	eventID := "testInvoke - "+org
 
 	orgSetup := s.ChooseORG(org)
-	orgName 			:= 	orgSetup.OrgName
-	orgSdk				:=  orgSetup.Sdk
-	orgAdmin			:=  orgSetup.OrgAdmin
-	caClient 			:= 	orgSetup.CaClient
+	orgName 		:= orgSetup.OrgName
+	orgSdk			:= orgSetup.Sdk
+	orgAdmin		:= orgSetup.OrgAdmin
+	caClient 		:= orgSetup.CaClient
 	channelClient, event,_ := s.CreateChannelClient(orgSdk, orgName, orgAdmin, caClient)
 
 	_, err := s.ExecuteChaincodeTranctionEvent(eventID, "invoke",[][]byte{
