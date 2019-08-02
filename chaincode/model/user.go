@@ -51,13 +51,13 @@ type User struct {
 }
 
 type HistoryData struct {
-	EmailKey			string 					`json:"emailKey"`
-	TxID  				string 					`json:"txId"`
-	QueryCreator		string 					`json:"creator"`
-	Query				string					`json:"query"`
-	TargetOrg			string					`json:"targetOrg"`
-	Time				string 					`json:"time"`
-	Remarks				string					`json:"remarks"`
+	EmailKey			string 				`json:"emailKey"`
+	TxID  				string 				`json:"txId"`
+	QueryCreator			string 				`json:"creator"`
+	Query				string				`json:"query"`
+	TargetOrg			string				`json:"targetOrg"`
+	Time				string 				`json:"time"`
+	Remarks				string				`json:"remarks"`
 }
 
 
