@@ -327,7 +327,7 @@ The chaincode policy will be adding all the member of the four organization</p>
 <p>This is most important in case CA registration. In Hyperledger fabric by default "org1 &amp; org2" are affiliated as CA organization, so any client or peer wants to register or enroll into the network via CA can pass "org1 or org2" as an affiliated organization.</p>
 </li>
 <li>
-<p>But in case of other organization like in this repo for org3 &amp; org4, they need to be affiliated using following CA Client API.</p>
+<p>But in case of other organization like org3 &amp; org4, they need to be affiliated using following CA Client API.</p>
 <pre><code>
 
 		// to perform the query individual org ca client needs to be used  
