@@ -37,7 +37,7 @@
 
 ./bin/configtxgen -profile FourOrgsOrdererGenesis -outputBlock ./artifacts/orderer.genesis.block
 
-./bin/configtxgen -profile FourOrgsChannel -outputCreateChannelTx ./artifacts/multiorgledger.channel.tx -channelID privateledger
+./bin/configtxgen -profile FourOrgsChannel -outputCreateChannelTx ./artifacts/privateledger.channel.tx -channelID privateledger
 
 ./bin/configtxgen -profile FourOrgsChannel -outputAnchorPeersUpdate ./artifacts/Org1MSPanchors.tx -channelID privateledger -asOrg Org1MSP
 
@@ -46,7 +46,9 @@
 ./bin/configtxgen -profile FourOrgsChannel -outputAnchorPeersUpdate ./artifacts/Org3MSPanchors.tx -channelID privateledger -asOrg Org3MSP
 
 ./bin/configtxgen -profile FourOrgsChannel -outputAnchorPeersUpdate ./artifacts/Org4MSPanchors.tx -channelID privateledger -asOrg Org4MSP
+
 </code></pre>
+
 <ol start="6">
 <li>
 <p>Start the network</p>
@@ -81,6 +83,7 @@
     if err != nil || txID.TransactionID == "" {
         return errors.WithMessage(err, "failed to save anchor channel for - "+s.OrgName)
     }
+    
 </code></pre>
 <ul>    
 <li>Each organization admins will create Anchor peers for their organization using the anchor peer artifacts.</li>
@@ -99,6 +102,7 @@
         if err != nil || txID.TransactionID == "" {
                 return errors.WithMessage(err, "failed to save anchor channel for - "+s.OrgName)
          }
+	 
 </code></pre>
 <h5>2. Join Channel</h5>
 <ul>
@@ -110,6 +114,7 @@
   if err := s.Resmgmt.JoinChannel(s.ChannelID, resmgmt.WithRetry(retry.DefaultResMgmtOpts),                                               resmgmt.WithOrdererEndpoint(Orderer.OrdererID)); err != nil {
      return errors.WithMessage(err, "failed to make admin join channel")
   }
+  
 </code></pre>
 </li>
 <li>
@@ -129,6 +134,7 @@
                         return true, nil
                 }
         }
+	
 </code></pre>
 </li>
 </ul>
@@ -155,6 +161,7 @@
            fmt.Println("failed to install chaincode : "+err.Error())
            return errors.WithMessage(err, "  failed to install chaincode")
         }
+	
 </code></pre>
 </li>
 </ul>
@@ -245,8 +252,8 @@ The chaincode policy will be adding all the member of the four organization</p>
 <ul>
 <li>
 <p>As the chaincode only be instantiated once, so if any changes made in the chaincode, then it will be upgraded with a new version code and keeping the chaincode name same (important) in the network.</p>
-<p>// Any one of organization resource management client can execute the upgrade query and their peers will be mention in the target.
-// Policy can be remain the same unless it requires modification based on your chaincode buiseness requirements.</p>
+<p>// Any one of organization resource management client can execute the upgrade query and their peers will be mention in the target.</p>
+<p>// Policy can be remain the same unless it requires modification based on your chaincode buiseness requirements.</p>
 <pre><code>
 
 	req := resmgmt.UpgradeCCRequest{
@@ -263,6 +270,7 @@ The chaincode policy will be adding all the member of the four organization</p>
 	if err != nil {
 	  return errors.WithMessage(err, " &gt;&gt;&gt;&gt; failed to upgrade chaincode")
 	}
+	
 </code></pre>
 </li>
 </ul>
@@ -290,7 +298,8 @@ The chaincode policy will be adding all the member of the four organization</p>
 	  if !found {
       		fmt.Println("   "+orgID+" chaincode is not installed on peer "+ peer.URL())
 	        installedOnAllPeers = false
-	  }   
+	  }  
+	  
 </code></pre>
 </li>
 </ul>
@@ -322,6 +331,7 @@ The chaincode policy will be adding all the member of the four organization</p>
 		        fmt.Println("  "+ccName+" chaincode is not instantiated on peer "+ peer.URL())
 		        installedOnAllPeers = false
 		    } 
+		    
 </code></pre>
 <h5>8. Affiliate an Org</h5>
 <ul>
@@ -346,6 +356,7 @@ The chaincode policy will be adding all the member of the four organization</p>
 		if err != nil {
 			return fmt.Errorf("Failed to add affiliation for CA '%s' : %v ", caid, err)
 		}
+		
 </code></pre>
 <p>we can also check, whether the organization has the affiliation from the CA client by using the following API.</p>
 <pre><code>
@@ -362,6 +373,7 @@ The chaincode policy will be adding all the member of the four organization</p>
 			  fmt.Println("AfInfo : " + AfInfo.Name)
 			  fmt.Println("CAName : " + CAName)
 		}
+		
 </code></pre>
 </li>
 </ul>
