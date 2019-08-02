@@ -1,4 +1,4 @@
-<h3>Private Ledger</h3>
+<h1>Private Ledger</h1>
 <p><a href="https://www.hyperledger.org/projects/fabric"><img src="https://www.hyperledger.org/wp-content/uploads/2016/09/logo_hl_new.png" alt="N|Solid"></a></p>
 <p>Private Ledger is a web application written in Go to demonstrate storing private data in  Hyperleder fabric multi-org environment. The blockchain network consists of four organization joined with a single channel. The ledger data created in private collection, so that the data only accessible to the related organization unless the collection data is shared to other organization. And also, this repo will be demonstrate sharing the private collection data among the organizations.</p>
 <h4>Setup the Config</h4>
