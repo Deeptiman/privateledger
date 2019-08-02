@@ -33,24 +33,24 @@ func (t *PrivateLedgerChaincode) createHistory(stub shim.ChaincodeStubInterface,
 
 	fmt.Println("	################# Create History - "+email+" ###############	")
 	
-	fmt.Println("	EmailKey 		- "+emailIndexKey)
-	fmt.Println("	TxID	 		- "+txID)
+	fmt.Println("	EmailKey 	- "+emailIndexKey)
+	fmt.Println("	TxID	 	- "+txID)
 	fmt.Println("	QueryCreator	- "+queryCreator)
-	fmt.Println("	Query			- "+query)
-	fmt.Println("	TargetOrg		- "+targetOrg)
-	fmt.Println("	Time			- "+time.String())
-	fmt.Println("	Remarks			- "+remarks)	
+	fmt.Println("	Query		- "+query)
+	fmt.Println("	TargetOrg	- "+targetOrg)
+	fmt.Println("	Time		- "+time.String())
+	fmt.Println("	Remarks		- "+remarks)	
 	
 	tm := model.GetTime(time)
 
 	history := &model.HistoryData {
-		EmailKey 			: emailIndexKey,
-		TxID	 			: txID,
+		EmailKey 		: emailIndexKey,
+		TxID	 		: txID,
 		QueryCreator	 	: queryCreator,
-		Query				: query,
-		TargetOrg			: targetOrg,
-		Time				: tm,
-		Remarks				: remarks,		
+		Query			: query,
+		TargetOrg		: targetOrg,
+		Time			: tm,
+		Remarks			: remarks,		
 	}
 
 	historyDataJSONasBytes, err := json.Marshal(history)
