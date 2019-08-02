@@ -61,17 +61,17 @@ func (t *PrivateLedgerChaincode) createUser(stub shim.ChaincodeStubInterface, ar
 	tm := model.GetTime(timestamp)
 
 	user := &model.User{ 
-		ID: 			userID, 
-		Name: 			name, 
-		Email: 			email, 
-		Mobile: 		mobile, 
-		Age: 			age, 
-		Salary: 		salary,
+		ID: 		userID, 
+		Name: 		name, 
+		Email: 		email, 
+		Mobile: 	mobile, 
+		Age: 		age, 
+		Salary: 	salary,
 		ShareAccess:	strconv.Itoa(int(model.ALL)),
-		Owner:  		queryCreatorOrg,
-		Role:			role,
-		Time:  			tm,
-		Targets: 		targets,		
+		Owner:  	queryCreatorOrg,
+		Role:		role,
+		Time:  		tm,
+		Targets: 	targets,		
 	}
 	
 	userJSONasBytes, err := json.Marshal(user)
@@ -104,15 +104,15 @@ func (t *PrivateLedgerChaincode) createUser(stub shim.ChaincodeStubInterface, ar
 
 	fmt.Println(" ###### Create Data Parameters ###### ")
 	fmt.Println(" Collection		= "+collection)
-	fmt.Println(" ID 				= "+userID)
-	fmt.Println(" Email				= "+email)
-	fmt.Println(" Name 				= "+name)
+	fmt.Println(" ID 			= "+userID)
+	fmt.Println(" Email			= "+email)
+	fmt.Println(" Name 			= "+name)
 	fmt.Println(" Mobile 			= "+mobile)
-	fmt.Println(" Age				= "+age)
+	fmt.Println(" Age			= "+age)
 	fmt.Println(" Salary 			= "+salary)
 	fmt.Println(" Owner 			= "+owner)
-	fmt.Println(" Role				= "+role)
-	fmt.Println(" Time				= "+tm)
+	fmt.Println(" Role			= "+role)
+	fmt.Println(" Time			= "+tm)
 	fmt.Println(" ################################## ")
 
 
