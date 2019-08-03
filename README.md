@@ -61,7 +61,7 @@ $ go version go1.<span class="hljs-number">11</span> linux/amd64
 </ul>
 </li>
 <li>
-<p>Ex : <b>"OR('Org1MSP.member')"</b> means any memeber of Org1 can sign a transaction and commit blocks to the blockchain. There are various endorsing principals like admin, client, peer or member. The principals can be used based on the network architecture or busieness logic requirements.</p>
+<p>Ex : <b>"OR('Org1MSP.member')"</b> means any memeber of Org1 can sign a transaction and commit blocks to the blockchain. There are various endorsing principals like admin, client, peer or member. The principals can be used based on the network architecture or business logic requirements.</p>
 </li>
 </ul>
 <ol start="2">
