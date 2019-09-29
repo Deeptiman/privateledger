@@ -34,16 +34,16 @@ $ go version go1.<span class="hljs-number">11</span> linux/amd64
   
   <pre><code>
   
-    	127.0.0.1	orderer.privacy.tracker.com
-	127.0.0.1	ca.org1.privacy.tracker.com
-	127.0.0.1	peer0.org1.privacy.tracker.com
-	127.0.0.1	peer1.org1.privacy.tracker.com
-	127.0.0.1	peer0.org2.privacy.tracker.com
-	127.0.0.1	peer1.org2.privacy.tracker.com
-	127.0.0.1	peer0.org3.privacy.tracker.com
-	127.0.0.1	peer1.org3.privacy.tracker.com
-	127.0.0.1	peer0.org4.privacy.tracker.com
-	127.0.0.1	peer1.org4.privacy.tracker.com
+    	127.0.0.1	orderer.private.ledger.com
+	127.0.0.1	ca.org1.private.ledger.com
+	127.0.0.1	peer0.org1.private.ledger.com
+	127.0.0.1	peer1.org1.private.ledger.com
+	127.0.0.1	peer0.org2.private.ledger.com
+	127.0.0.1	peer1.org2.private.ledger.com
+	127.0.0.1	peer0.org3.private.ledger.com
+	127.0.0.1	peer1.org3.private.ledger.com
+	127.0.0.1	peer0.org4.private.ledger.com
+	127.0.0.1	peer1.org4.private.ledger.com
   
   </code></pre>
     
