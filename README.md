@@ -425,6 +425,24 @@ The chaincode policy will be adding all the member of the four organization</p>
 </code></pre>
 </li>
 </ul>
+
+<h4>Dependency Issues</h4>
+<ol>
+   <li>
+      Hyperledger fabric-sdk-go is still in development. If you do dep ensure for each <b>Gopkg.toml</b> in <b>PrivateLedger</b> and <b>Chaincode</b>, it will download the govendor folder for each module but it will have some compilation issues while building the project. I have corrected the error for both <b>PrivateLedger and Chaincode</b> folder.
+   </li>
+   <li>
+   Please download the vendor folder and add it in your project repo.   
+      
+   PrivateLedger - https://www.dropbox.com/s/ry1jmw0y9xliose/vendor.zip?dl=0
+   
+   Chaincode - https://www.dropbox.com/s/31nnqflpqwaywoa/vendor.zip?dl=0
+   </li>
+   <li>
+   <b>Add vendor folders at the location where Gopkg.toml file is located.</b>
+   </li>
+</ol>
+
 <p>So, this concludes the essential multi-org network setup for a 4 organizations based network.</p>
 <h4>Run the application</h4>
 <ol>
