@@ -1,4 +1,4 @@
-ignored = ["github.com/privacytracker/chaincode"]
+ignored = ["github.com/privateledger/chaincode"]
 
 [[constraint]]
   # Release v1.0.0-alpha4
