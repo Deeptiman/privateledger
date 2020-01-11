@@ -3,6 +3,8 @@
 <p>Private Ledger is a web application written in Go to demonstrate storing private data in  Hyperleder fabric multi-org environment. The blockchain network consists of four organization joined with a single channel. The ledger data created in private collection, so that the data only accessible to the related organization unless the collection data is shared to other organization. And also, this repo will be demonstrate sharing the private collection data among the organizations.</p>
 <p> However, this explanation guide does not explain how Hyperledger Fabric works, so for the information, you can follow at <a href="https://www.hyperledger.org/projects/fabric">Hyperledger.</a> </p>
 
+<p><b>Medium writeup : </b><a href="https://medium.com/@deeptiman/confidentiality-and-private-data-in-hyperledger-fabric-1279c8e2e57f">https://medium.com/@deeptiman/confidentiality-and-private-data-in-hyperledger-fabric-1279c8e2e57f</a>
+
 <h4><a id="Installation_6"></a>Installation</h4>
 <p>Private Ledger requires <a href="https://www.docker.com/">Docker</a> &amp; <a href="https://golang.org/">Go</a> to run.</p>
 <h3><a id="Docker_10"></a>Docker</h3>
