@@ -458,25 +458,3 @@ The chaincode policy will be adding all the member of the four organization</p>
 <p>And for <b>Web App</b>, you can use server running at - <a href="http://localhost:6000">http://localhost:6000</a></p>
 </li>
 </ol>
-
-
-<h4>Few Screenshots</h4>
-
-<h5> Dashboard </h5>
-
-<img src="screenshots/3_dashboard.png">
-
-
-<h5> History </h5>
-
-<img src="screenshots/6_history.png">
-
-
-<h5> Share </h5>
-
-<img src="screenshots/5_share.png">
-
-
-<h5> Share History </h5>
-
-<img src="screenshots/7_share_history.png">
