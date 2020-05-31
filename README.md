@@ -458,3 +458,6 @@ The chaincode policy will be adding all the member of the four organization</p>
 <p>And for <b>Web App</b>, you can use server running at - <a href="http://localhost:6000">http://localhost:6000</a></p>
 </li>
 </ol>
+
+<h2>License</h2>
+<p>This project is licensed under the <a href="https://github.com/Deeptiman/privateledger/blob/master/LICENSE">MIT License</a></p>
