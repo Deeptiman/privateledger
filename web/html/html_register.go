@@ -1,10 +1,10 @@
 package html
 
 import (
+	"privateledger/blockchain/invoke"
+	"privateledger/chaincode/model"
 	"fmt"
 	"net/http"
-	"github.com/privateledger/blockchain/invoke"
-	"github.com/privateledger/chaincode/model"
 )
 
 func (app *HtmlApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -13,30 +13,30 @@ func (app *HtmlApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		TransactionId string
 		ErrorMsg      string
 		Error         bool
-		Register   	  bool
-		Login		  bool
+		Register      bool
+		Login         bool
 		Success       bool
 		Response      bool
 		Username      string
-		UserOrg		  string
-		CustomOrg1	  string
-		CustomOrg2	  string
-		CustomOrg3	  string
-		CustomOrg4	  string
+		UserOrg       string
+		CustomOrg1    string
+		CustomOrg2    string
+		CustomOrg3    string
+		CustomOrg4    string
 	}{
 		TransactionId: "",
 		ErrorMsg:      "",
 		Error:         false,
 		Register:      false,
-		Login:		   false,
+		Login:         false,
 		Success:       false,
 		Response:      false,
 		Username:      "",
-		UserOrg:	   "",
-		CustomOrg1:	   model.GetCustomOrgName("org1"),
-		CustomOrg2:	   model.GetCustomOrgName("org2"),
-		CustomOrg3:	   model.GetCustomOrgName("org3"),
-		CustomOrg4:	   model.GetCustomOrgName("org4"),
+		UserOrg:       "",
+		CustomOrg1:    model.GetCustomOrgName("org1"),
+		CustomOrg2:    model.GetCustomOrgName("org2"),
+		CustomOrg3:    model.GetCustomOrgName("org3"),
+		CustomOrg4:    model.GetCustomOrgName("org4"),
 	}
 
 	fmt.Println("RegisterHandler : " + r.FormValue("signupSubmitted"))
@@ -47,26 +47,26 @@ func (app *HtmlApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 		data.Register = true
 
-		orgName 	:= r.FormValue("company")
-		name 		:= r.FormValue("name")
-		mobile 		:= r.FormValue("mobile")
-		age 		:= r.FormValue("age")
-		salary 		:= r.FormValue("salary")
+		orgName := r.FormValue("company")
+		name := r.FormValue("name")
+		mobile := r.FormValue("mobile")
+		age := r.FormValue("age")
+		salary := r.FormValue("salary")
 
-		email 		:= r.FormValue("email")		
-		password 	:= hash(r.FormValue("password"))
-		role 		:= r.FormValue("role")
+		email := r.FormValue("email")
+		password := hash(r.FormValue("password"))
+		role := r.FormValue("role")
 
 		fmt.Println(" ####### Web Input for Register ####### ")
 
-		fmt.Println(" Email = "+email)
-		fmt.Println(" Password = "+password)	
-		fmt.Println(" Role = "+role)
+		fmt.Println(" Email = " + email)
+		fmt.Println(" Password = " + password)
+		fmt.Println(" Role = " + role)
 
-		fmt.Println(" Name = "+name)
-		fmt.Println(" Age = "+age)
-		fmt.Println(" Mobile = "+mobile)
-		fmt.Println(" Salary = "+salary)
+		fmt.Println(" Name = " + name)
+		fmt.Println(" Age = " + age)
+		fmt.Println(" Mobile = " + mobile)
+		fmt.Println(" Salary = " + salary)
 		fmt.Println(" ###################################### ")
 
 		Org, err := app.Org.InitializeOrg(orgName)
@@ -79,37 +79,37 @@ func (app *HtmlApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 		} else {
 
-				orgUser, err := Org.RegisterUserWithCA(orgName, email, password, role)
+			orgUser, err := Org.RegisterUserWithCA(orgName, email, password, role)
 
-				orgInvoke := invoke.OrgInvoke {
-					User: orgUser,
-				}
+			orgInvoke := invoke.OrgInvoke{
+				User: orgUser,
+			}
 
-				if err != nil {
+			if err != nil {
 
-					fmt.Println("Web Error ----->>> Unable to Register Error Msg : %v", err)
-				
-					data.Error = true
-					data.ErrorMsg = err.Error()
+				fmt.Println("Web Error ----->>> Unable to Register Error Msg : %v", err)
 
-				} else {
+				data.Error = true
+				data.ErrorMsg = err.Error()
 
-					data.Username = email
-					data.Success = true
+			} else {
 
-					token := app.processAuthentication(w, email)
+				data.Username = email
+				data.Success = true
 
-					if len(token) > 0 {
-						err := orgInvoke.InvokeCreateUser(name, age, mobile, salary)
+				token := app.processAuthentication(w, email)
 
-						if err != nil {
-							fmt.Errorf("failed to invoke user "+err.Error())
-						} else {
+				if len(token) > 0 {
+					err := orgInvoke.InvokeCreateUser(name, age, mobile, salary)
 
-							http.Redirect(w, r, "/index.html", 302)
-						}
+					if err != nil {
+						fmt.Errorf("failed to invoke user " + err.Error())
+					} else {
+
+						http.Redirect(w, r, "/index.html", 302)
 					}
 				}
+			}
 		}
 		data.Response = true
 	}

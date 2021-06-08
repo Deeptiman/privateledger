@@ -120,7 +120,7 @@ func(s *OrgSetup) InstantiateCCForOrg(orgPeers []fab.Peer) error {
 			Version: 	s.ChainCodeVersion,
 			Args:    	[][]byte{[]byte("init")},
 			Policy:  	ccPolicy,
-			CollConfig: 	cfg,
+			CollConfig: cfg,
 
 	},resmgmt.WithRetry(retry.DefaultResMgmtOpts), resmgmt.WithTargets(orgPeers[0], orgPeers[1]))
 
@@ -170,7 +170,7 @@ func(s *OrgSetup) UpgradeCCForOrg(orgPeers []fab.Peer) error {
 		Path: 		s.ChaincodePath, 
 		Args:  		[][]byte{[]byte("init")},
 		Policy: 	ccPolicy,
-		CollConfig: 	cfg,		
+		CollConfig: cfg,		
 	}
 
 	resp, err := s.Resmgmt.UpgradeCC(s.ChannelID, req, resmgmt.WithRetry(retry.DefaultResMgmtOpts),resmgmt.WithTargets(orgPeers[0], orgPeers[1]))

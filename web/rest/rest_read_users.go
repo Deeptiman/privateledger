@@ -1,11 +1,11 @@
 package rest
 
 import (
-	"fmt"
+	"privateledger/blockchain/invoke"
+	"privateledger/web/model"
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"github.com/privateledger/blockchain/invoke"
-	"github.com/privateledger/web/model"
 )
 
 func (app *RestApp) GetUserDataByEmailHandler() func(http.ResponseWriter, *http.Request) {
@@ -18,24 +18,24 @@ func (app *RestApp) GetUserDataByEmailHandler() func(http.ResponseWriter, *http.
 			respondJSON(w, map[string]string{"error": "No Session Available"})
 		} else {
 
-				var userdata model.ModelUserData
-				_ = json.NewDecoder(r.Body).Decode(&userdata)		
-				email := userdata.Email
-	
-				fmt.Println(" Session User - "+orgUser.Username)
-				fmt.Println(" Session OrgName - "+orgUser.Setup.OrgName)
+			var userdata model.ModelUserData
+			_ = json.NewDecoder(r.Body).Decode(&userdata)
+			email := userdata.Email
 
-				orgInvoke := invoke.OrgInvoke {
-					User: orgUser,
-				}
-	
-				UserData, err := orgInvoke.GetUserFromLedger(email, true)
+			fmt.Println(" Session User - " + orgUser.Username)
+			fmt.Println(" Session OrgName - " + orgUser.Setup.OrgName)
 
-				if err != nil {
-					respondJSON(w, map[string]string{"error": "No User Data Found"})
-				} else {
-					respondJSON(w, UserData)
-				}			
+			orgInvoke := invoke.OrgInvoke{
+				User: orgUser,
+			}
+
+			UserData, err := orgInvoke.GetUserFromLedger(email, true)
+
+			if err != nil {
+				respondJSON(w, map[string]string{"error": "No User Data Found"})
+			} else {
+				respondJSON(w, UserData)
+			}
 		}
 	})
 }
@@ -50,10 +50,10 @@ func (app *RestApp) GetAllUsersDataHandler() func(http.ResponseWriter, *http.Req
 			respondJSON(w, map[string]string{"error": "No Session Available"})
 		} else {
 
-			orgInvoke := invoke.OrgInvoke {
+			orgInvoke := invoke.OrgInvoke{
 				User: orgUser,
 			}
-	
+
 			allUsersData, err := orgInvoke.GetAllUsersFromLedger()
 
 			if err != nil {
@@ -61,7 +61,7 @@ func (app *RestApp) GetAllUsersDataHandler() func(http.ResponseWriter, *http.Req
 			} else {
 				respondJSON(w, allUsersData)
 			}
-			
+
 		}
 	})
 }

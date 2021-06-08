@@ -9,7 +9,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/privateledger/blockchain/org"
+	"privateledger/blockchain/org"
 )
 
 var PORT = "6000"
@@ -27,7 +27,7 @@ func hash(s string) string {
 
 	return sha1_hash
 }
- 
+
 func renderTemplate(w http.ResponseWriter, r *http.Request, templateName string, data interface{}) {
 
 	lp := filepath.Join("web", "templates", "layout.html")

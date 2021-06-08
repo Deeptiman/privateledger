@@ -1,9 +1,9 @@
 package rest
 
 import (
+	"privateledger/web/model"
 	"encoding/json"
 	"net/http"
-	"github.com/privateledger/web/model"
 )
 
 func (app *RestApp) ChangePwdHandler() func(http.ResponseWriter, *http.Request) {

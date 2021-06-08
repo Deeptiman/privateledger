@@ -1,20 +1,20 @@
 package main
 
 import (
+	"privateledger/chaincode/model"
+	"encoding/json"
 	"fmt"
 	"strings"
-	"encoding/json"
-	"github.com/privateledger/chaincode/model"
-	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric/core/chaincode/shim"
-)
 
+	"github.com/golang/protobuf/proto"
+	"github.com/hyperledger/fabric-chaincode-go/shim"
+)
 
 func getPrivateDataFromLedger(stub shim.ChaincodeStubInterface, key, collection string, result interface{}) error {
 
 	resultAsByte, err := stub.GetPrivateData(collection, key)
 	if err != nil {
-		return fmt.Errorf("Get User Data Error "+err.Error())
+		return fmt.Errorf("Get User Data Error " + err.Error())
 	}
 
 	if err != nil {
@@ -56,15 +56,14 @@ func byteToObject(objectAsByte []byte, result interface{}) error {
 	return nil
 }
 
-
 func parseOrgAccessList(org string, targets string) (int32, string, error) {
 
 	tgts := make(map[string][]byte)
-	
-	err  := json.Unmarshal([]byte(targets), &tgts)
-	
+
+	err := json.Unmarshal([]byte(targets), &tgts)
+
 	if err != nil {
-		fmt.Println("ParseOrgAccessList = failed to unmarshaling error: "+err.Error())
+		fmt.Println("ParseOrgAccessList = failed to unmarshaling error: " + err.Error())
 		return -1, "", fmt.Errorf("failed to unmarshaling error: ", err.Error())
 	}
 
@@ -73,25 +72,25 @@ func parseOrgAccessList(org string, targets string) (int32, string, error) {
 		orgName := key
 		obj := []byte(value)
 
-		fmt.Println(" ############# Unmarshal Target - "+orgName+"  ################## ")
-	
+		fmt.Println(" ############# Unmarshal Target - " + orgName + "  ################## ")
+
 		newTarget := &model.Target{}
 		err = proto.Unmarshal([]byte(obj), newTarget)
 		if err != nil {
-			fmt.Println("ParseOrgTargets = unmarshaling error: "+err.Error())
+			fmt.Println("ParseOrgTargets = unmarshaling error: " + err.Error())
 			return -1, "", fmt.Errorf("unmarshaling error: ", err.Error())
 		}
-	
-		if strings.EqualFold(org,orgName){
-			return newTarget.GetAccess(),newTarget.GetTransactionHash(),  nil
+
+		if strings.EqualFold(org, orgName) {
+			return newTarget.GetAccess(), newTarget.GetTransactionHash(), nil
 		}
 
-		fmt.Println(" ###### Org - "+orgName+" Access ###### ")
-		fmt.Println(" Target Access = ",newTarget.GetAccess())  
-		fmt.Println(" Target Remarks = ",newTarget.GetRemarks())  
-		fmt.Println(" Target TransactionHash = ",newTarget.GetTransactionHash())
-	
-		fmt.Println(" ################################################## ")	
+		fmt.Println(" ###### Org - " + orgName + " Access ###### ")
+		fmt.Println(" Target Access = ", newTarget.GetAccess())
+		fmt.Println(" Target Remarks = ", newTarget.GetRemarks())
+		fmt.Println(" Target TransactionHash = ", newTarget.GetTransactionHash())
+
+		fmt.Println(" ################################################## ")
 	}
 
 	return -1, "", nil

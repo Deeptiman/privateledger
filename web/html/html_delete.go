@@ -1,10 +1,10 @@
 package html
 
 import (
+	"privateledger/blockchain/invoke"
 	"fmt"
-	"strings"
 	"net/http"
-	"github.com/privateledger/blockchain/invoke"
+	"strings"
 )
 
 func (app *HtmlApp) DeletePageHandler() func(http.ResponseWriter, *http.Request) {
@@ -20,11 +20,10 @@ func (app *HtmlApp) DeletePageHandler() func(http.ResponseWriter, *http.Request)
 			owner := r.FormValue("deleteOwner")
 			creatorRole := r.FormValue("deleteCreatorRole")
 			targets := r.FormValue("deleteTargets")
-			
 
-			fmt.Println(" Delete Email = "+email)
-			fmt.Println(" Delete Role = "+role)
-			fmt.Println(" Delete Owner = "+owner)
+			fmt.Println(" Delete Email = " + email)
+			fmt.Println(" Delete Role = " + role)
+			fmt.Println(" Delete Owner = " + owner)
 
 			orgUser := app.Org.GetOrgUser()
 
@@ -34,18 +33,18 @@ func (app *HtmlApp) DeletePageHandler() func(http.ResponseWriter, *http.Request)
 				data.ErrorMsg = "No session available"
 
 			} else {
-				
-				orgInvoke := invoke.OrgInvoke {
+
+				orgInvoke := invoke.OrgInvoke{
 					User: orgUser,
 					Role: creatorRole,
 				}
-				
+
 				orgSetup := orgUser.Setup.ChooseORG(strings.ToLower(owner))
 
 				err := orgUser.RemoveUser(email, orgSetup.OrgCaID, orgSetup.CaClient)
 
 				if err != nil {
-					fmt.Println("Error Removing User - "+email+" :: "+err.Error())
+					fmt.Println("Error Removing User - " + email + " :: " + err.Error())
 				}
 
 				// ReInitialize to Session Org
@@ -59,11 +58,11 @@ func (app *HtmlApp) DeletePageHandler() func(http.ResponseWriter, *http.Request)
 					data.Error = true
 					data.ErrorMsg = err.Error()
 
-					fmt.Println("Error Deleting User from ledger - "+email+" :: "+err.Error())
+					fmt.Println("Error Deleting User from ledger - " + email + " :: " + err.Error())
 
 				} else {
 
-					if strings.EqualFold(email, orgUser.Username){
+					if strings.EqualFold(email, orgUser.Username) {
 						data.Logout = true
 						http.Redirect(w, r, "/logout", 302)
 					} else {
@@ -72,10 +71,10 @@ func (app *HtmlApp) DeletePageHandler() func(http.ResponseWriter, *http.Request)
 						if err != nil {
 							data.Error = true
 							data.ErrorMsg = err.Error()
-						} 
+						}
 
 						data.DeleteUser = email
-						data.Delete = true					
+						data.Delete = true
 					}
 				}
 			}

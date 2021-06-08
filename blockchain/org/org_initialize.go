@@ -5,7 +5,7 @@ import (
 	"strings"
 	fabAPI "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/fab"
 	contextAPI "github.com/hyperledger/fabric-sdk-go/pkg/common/providers/context"
-	cb "github.com/hyperledger/fabric-sdk-go/third_party/github.com/hyperledger/fabric/protos/common"
+	pr "github.com/hyperledger/fabric-protos-go/peer"
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/msp"
 	"github.com/pkg/errors"
 )
@@ -23,10 +23,10 @@ var totalOrg = 5
 
 var orgPeers []fabAPI.Peer
 var channelCtx contextAPI.ChannelProvider
-var collCfg *cb.CollectionConfig
+var collCfg *pr.CollectionConfig
 
 var signIdentities = make([]msp.SigningIdentity, 0, totalOrg-1)
-var collConfigs = make([]*cb.CollectionConfig, 0, totalOrg-1)
+var collConfigs = make([]*pr.CollectionConfig, 0, totalOrg-1)
 
 
 func(s *OrgSetup) Init(processAll bool) error {
@@ -133,8 +133,8 @@ func InitiateOrderer() (OrgSetup,error) {
 	obj := OrgSetup {
 		OrgAdmin: 			"Admin",
 		OrgName:  			"OrdererOrg",
-		ConfigFile: 			"config-org1.yaml",
-		ChannelConfig: 			"privateledger.channel.tx",
+		ConfigFile: 		"config-org1.yaml",
+		ChannelConfig: 		"privateledger.channel.tx",
 	}
 
 	orderer, err  := initializeOrg(obj)

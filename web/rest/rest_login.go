@@ -1,11 +1,11 @@
 package rest
 
 import (
+	"privateledger/blockchain/invoke"
+	"privateledger/web/model"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"github.com/privateledger/blockchain/invoke"
-	"github.com/privateledger/web/model"
 )
 
 func (app *RestApp) LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -14,20 +14,20 @@ func (app *RestApp) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	_ = json.NewDecoder(r.Body).Decode(&userdata)
 
-	orgName   := userdata.Org
+	orgName := userdata.Org
 	email := userdata.Email
 	password := hash(userdata.Password)
 
 	Org, err := app.Org.InitializeOrg(orgName)
 	if err != nil {
-		respondJSON(w, map[string]string{"error": "failed to invoke user "+err.Error()})			
+		respondJSON(w, map[string]string{"error": "failed to invoke user " + err.Error()})
 	}
 
 	fmt.Println("Sign In --->  emailValue = " + email)
 
 	orgUser, err := Org.LoginUserWithCA(email, password)
 
-	orgInvoke := invoke.OrgInvoke {
+	orgInvoke := invoke.OrgInvoke{
 		User: orgUser,
 	}
 
@@ -48,12 +48,12 @@ func (app *RestApp) LoginHandler(w http.ResponseWriter, r *http.Request) {
 			} else {
 				respondJSON(w, map[string]string{
 
-					"token":      	token,
-					"name":       	UserData.Name,
-					"email":      	UserData.Email,
-					"age":       	UserData.Age,
-					"mobile":       UserData.Mobile,
-					"salary":     	UserData.Salary,
+					"token":  token,
+					"name":   UserData.Name,
+					"email":  UserData.Email,
+					"age":    UserData.Age,
+					"mobile": UserData.Mobile,
+					"salary": UserData.Salary,
 				})
 			}
 

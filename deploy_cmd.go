@@ -1,9 +1,10 @@
 package main
 
 import (
+	"privateledger/blockchain/org"
 	"fmt"
 	"strings"
-	"github.com/privateledger/blockchain/org"
+
 	"github.com/pkg/errors"
 )
 

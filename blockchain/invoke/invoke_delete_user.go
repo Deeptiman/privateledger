@@ -1,99 +1,96 @@
 package invoke
 
 import (
+	"privateledger/blockchain/org"
+	"privateledger/chaincode/model"
 	"fmt"
-	"sync"
-	"strings"
 	"strconv"
+	"strings"
+	"sync"
+
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/event"
-	"github.com/privateledger/blockchain/org"
-	"github.com/privateledger/chaincode/model"
-
 )
 
 func (s *OrgInvoke) DeleteUserFromLedger(email, targets, role string) error {
 
 	fmt.Println(" ############## Invoke Delete User ################")
-  
-	if !s.OrgHasAccess(targets, 
+
+	if !s.OrgHasAccess(targets,
 		model.LedgerAccess(model.DELETE).Int(),
-		s.User.Setup.OrgName){
+		s.User.Setup.OrgName) {
 		return fmt.Errorf("org has no delete access")
 	}
 
-	orgList, _ := s.GetAccessOrgList(targets)	
+	orgList, _ := s.GetAccessOrgList(targets)
 	user, _ := s.GetUserFromLedger(email, false)
 
+	/*
+		########################  Access Override #########################################
+			Query Initiator Org will override the access privillege for other participated
+			Organizations, and in the remark the query initator org will claim performing
+			the query.
 
-	/*	
-	########################  Access Override #########################################
-		Query Initiator Org will override the access privillege for other participated
-		Organizations, and in the remark the query initator org will claim performing 
-		the query. 
+			This scenario will appear, if participated Org during a transaction don't have
+			access to perform the query
 
-		This scenario will appear, if participated Org during a transaction don't have 
-		access to perform the query
-		
-		A transaction hash stored in both Org collection will verfiy the invoked query
+			A transaction hash stored in both Org collection will verfiy the invoked query
 	*/
-		queryAccess := strconv.Itoa(int(model.DELETE))
+	queryAccess := strconv.Itoa(int(model.DELETE))
 
 	// ###############################################################################//
 
-
 	fmt.Println(" ######## Delete User Data ##########")
 
-		threads := len(orgList)	
-		var wg sync.WaitGroup
+	threads := len(orgList)
+	var wg sync.WaitGroup
 
-		respond := make(chan string, threads)	
-		wg.Add(threads)
+	respond := make(chan string, threads)
+	wg.Add(threads)
 
-		for _, orgName := range orgList {
+	for _, orgName := range orgList {
 
-			fmt.Println(" Particiapted Org - "+orgName)
+		fmt.Println(" Particiapted Org - " + orgName)
 
-			orgSetup := s.User.Setup.ChooseORG(strings.ToLower(orgName))
-			orgSdk			:=  orgSetup.Sdk
-			orgAdmin		:=  orgSetup.OrgAdmin
-			caClient 		:= 	orgSetup.CaClient		
-			channelClient, event, _:=  orgSetup.CreateChannelClient(orgSdk, orgName, orgAdmin, caClient)
+		orgSetup := s.User.Setup.ChooseORG(strings.ToLower(orgName))
+		orgSdk := orgSetup.Sdk
+		orgAdmin := orgSetup.OrgAdmin
+		caClient := orgSetup.CaClient
+		channelClient, event, _ := orgSetup.CreateChannelClient(orgSdk, orgName, orgAdmin, caClient)
 
-			queryTxnHash, err := s.GetSecretMessage(user.Owner, orgName)
+		queryTxnHash, err := s.GetSecretMessage(user.Owner, orgName)
 
-			if err != nil {
-				return fmt.Errorf("Invalid Hash, unable to invoke delete query for - "+orgName, err)
-			}
-
-			go s.deleteUserData(respond, &wg, orgSetup, email, role, queryAccess, queryTxnHash, channelClient, event)
+		if err != nil {
+			return fmt.Errorf("Invalid Hash, unable to invoke delete query for - "+orgName, err)
 		}
 
-		wg.Wait()
-		close(respond)
+		go s.deleteUserData(respond, &wg, orgSetup, email, role, queryAccess, queryTxnHash, channelClient, event)
+	}
 
-		for queryResp := range respond {
-			fmt.Println("Update Response: "+ queryResp)
-		}
+	wg.Wait()
+	close(respond)
+
+	for queryResp := range respond {
+		fmt.Println("Update Response: " + queryResp)
+	}
 
 	return nil
 }
 
+func (s *OrgInvoke) deleteUserData(respond chan<- string, wg *sync.WaitGroup, orgSetup *org.OrgSetup, email, role, queryAccess, queryTxnHash string, channelClient *channel.Client, ccEvent *event.Client) {
 
-func(s *OrgInvoke) deleteUserData(respond chan<- string, wg *sync.WaitGroup, orgSetup *org.OrgSetup, email, role, queryAccess,  queryTxnHash string, channelClient  *channel.Client, ccEvent *event.Client){
-	
-	eventID := "deleteUserDataInvoke"		
+	eventID := "deleteUserDataInvoke"
 	queryCreatorOrg := s.User.Setup.OrgName
 	queryCreatorRole := s.Role
 	targetOrg := orgSetup.OrgName
 	needHistory := strconv.FormatBool(true)
 
 	fmt.Println(" ########### Invoke Update Query Details ########### ")
-	fmt.Println("	queryCreatorOrg - "+queryCreatorOrg)
-	fmt.Println("   queryCreatorRole - "+queryCreatorRole)
-	fmt.Println("	queryAccess - "+queryAccess)
-	fmt.Println("	queryTxnHash - "+queryTxnHash)
-	fmt.Println("	Collection - "+orgSetup.OrgCollection)
+	fmt.Println("	queryCreatorOrg - " + queryCreatorOrg)
+	fmt.Println("   queryCreatorRole - " + queryCreatorRole)
+	fmt.Println("	queryAccess - " + queryAccess)
+	fmt.Println("	queryTxnHash - " + queryTxnHash)
+	fmt.Println("	Collection - " + orgSetup.OrgCollection)
 	fmt.Println(" ##################################### ")
 
 	_, err := orgSetup.ExecuteChaincodeTranctionEvent(eventID, "invoke",
@@ -102,7 +99,7 @@ func(s *OrgInvoke) deleteUserData(respond chan<- string, wg *sync.WaitGroup, org
 			[]byte(email),
 			[]byte(orgSetup.OrgCollection),
 			[]byte(eventID),
-			
+
 			[]byte(queryAccess),
 			[]byte(queryTxnHash),
 
@@ -111,8 +108,7 @@ func(s *OrgInvoke) deleteUserData(respond chan<- string, wg *sync.WaitGroup, org
 			[]byte(queryCreatorRole),
 			[]byte(targetOrg),
 			[]byte(needHistory),
-		
-	}, orgSetup.ChaincodeId, orgSetup.ChannelClient, orgSetup.Event)
+		}, orgSetup.ChaincodeId, orgSetup.ChannelClient, orgSetup.Event)
 
 	if err != nil {
 		fmt.Errorf("Error - DeleteUserFromLedger : %s", err.Error())

@@ -1,13 +1,13 @@
 package rest
 
 import (
+	"privateledger/blockchain/invoke"
+	"privateledger/web/model"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
 	"unicode"
-	"github.com/privateledger/blockchain/invoke"
-	"github.com/privateledger/web/model"
 )
 
 func (app *RestApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
@@ -16,27 +16,26 @@ func (app *RestApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 	_ = json.NewDecoder(r.Body).Decode(&userdata)
 
-	
-	orgName   := userdata.Org
+	orgName := userdata.Org
 	email := userdata.Email
-	name  := userdata.Name
+	name := userdata.Name
 	mobile := userdata.Mobile
-	age 	:= userdata.Age
-	salary := userdata.Salary		
+	age := userdata.Age
+	salary := userdata.Salary
 	role := userdata.Role
 	password := hash(userdata.Password)
 	verifyErr := verifyPassword(userdata.Password)
 
 	fmt.Println(" ####### Rest Input for Register ####### ")
 
-	fmt.Println(" Email = "+email)
-	fmt.Println(" Password = "+password)	
-	fmt.Println(" Role = "+role)
+	fmt.Println(" Email = " + email)
+	fmt.Println(" Password = " + password)
+	fmt.Println(" Role = " + role)
 
-	fmt.Println(" Name = "+name)
-	fmt.Println(" Mobile = "+mobile)
-	fmt.Println(" Age = "+age)
-	fmt.Println(" Salary = "+salary)
+	fmt.Println(" Name = " + name)
+	fmt.Println(" Mobile = " + mobile)
+	fmt.Println(" Age = " + age)
+	fmt.Println(" Salary = " + salary)
 	fmt.Println(" ###################################### ")
 
 	if verifyErr != nil && len(verifyErr.Error()) > 0 {
@@ -46,13 +45,12 @@ func (app *RestApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 	Org, err := app.Org.InitializeOrg(orgName)
 	if err != nil {
-		respondJSON(w, map[string]string{"error": "failed to invoke user "+err.Error()})			
+		respondJSON(w, map[string]string{"error": "failed to invoke user " + err.Error()})
 	}
 
-	
 	orgUser, err := Org.RegisterUserWithCA(orgName, email, password, role)
 
-	orgInvoke := invoke.OrgInvoke {
+	orgInvoke := invoke.OrgInvoke{
 		User: orgUser,
 	}
 
@@ -66,19 +64,19 @@ func (app *RestApp) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 			err := orgInvoke.InvokeCreateUser(name, age, mobile, salary)
 			if err != nil {
-				respondJSON(w, map[string]string{"error": "failed to invoke user "+err.Error()})
+				respondJSON(w, map[string]string{"error": "failed to invoke user " + err.Error()})
 			} else {
-				
+
 				respondJSON(w, map[string]string{
-					"token"		:   token,
-					"name"		:   name,
-					"email"		:   email,
-					"age"		:	age,
-					"mobile" 	:	mobile,
-					"salary"	:   salary,
-				})				
+					"token":  token,
+					"name":   name,
+					"email":  email,
+					"age":    age,
+					"mobile": mobile,
+					"salary": salary,
+				})
 			}
-		 
+
 		} else {
 			respondJSON(w, map[string]string{"error": "Failed to generate token"})
 		}

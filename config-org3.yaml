@@ -58,7 +58,7 @@ client:
 
   # Root of the MSP directories with keys and certs.
   cryptoconfig:
-    path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config
+    path: ${GOPATH}/src/privateledger/fixtures/crypto-config
 
   # Some SDKs support pluggable KV stores, the properties under "credentialStore"
   # are implementation specific
@@ -192,9 +192,9 @@ organizations:
     # this way. The SDK should allow applications to set the org admin identity via APIs, and only use
     # this route as an alternative when it exists.
     adminPrivateKey:
-      path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/users/Admin@org3.private.ledger.com/msp/keystore/e7c0ee3018fc9bb0c5013189c37647efdaea2a577916a1b07aa6fc19cc6866fa_sk
+      path: ${GOPATH}/src/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/users/Admin@org3.private.ledger.com/msp/keystore/e7c0ee3018fc9bb0c5013189c37647efdaea2a577916a1b07aa6fc19cc6866fa_sk
     signedCert:
-      path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/users/Admin@org3.private.ledger.com/msp/signcerts/Admin@org3.private.ledger.com-cert.pem  
+      path: ${GOPATH}/src/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/users/Admin@org3.private.ledger.com/msp/signcerts/Admin@org3.private.ledger.com-cert.pem  
   
   ordererorg:
       # Membership Service Provider ID for this organization
@@ -229,8 +229,8 @@ orderers:
 
     tlsCACerts:
       # Certificate location absolute path
-      #path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/ordererOrganizations/private.ledger.com/tlsca/tlsca.private.ledger.com-cert.pem
-      path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/ordererOrganizations/private.ledger.com/orderers/orderer.private.ledger.com/tls/ca.crt
+      #path: ${GOPATH}/src/privateledger/fixtures/crypto-config/ordererOrganizations/private.ledger.com/tlsca/tlsca.private.ledger.com-cert.pem
+      path: ${GOPATH}/src/privateledger/fixtures/crypto-config/ordererOrganizations/private.ledger.com/orderers/orderer.private.ledger.com/tls/ca.crt
 #
 # List of peers to send various requests to, including endorsement, query
 # and event listener registration.
@@ -256,8 +256,8 @@ peers:
 
     tlsCACerts:
       # Certificate location absolute path
-      #path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/tlsca/tlsca.org3.private.ledger.com-cert.pem
-      path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/peers/peer0.org3.private.ledger.com/tls/ca.crt
+      #path: ${GOPATH}/src/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/tlsca/tlsca.org3.private.ledger.com-cert.pem
+      path: ${GOPATH}/src/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/peers/peer0.org3.private.ledger.com/tls/ca.crt
 
   peer1.org3.private.ledger.com:
     # this URL is used to send endorsement and query requests
@@ -279,8 +279,8 @@ peers:
 
     tlsCACerts:
       # Certificate location absolute path
-      #path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/tlsca/tlsca.org3.private.ledger.com-cert.pem
-      path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/peers/peer1.org3.private.ledger.com/tls/ca.crt
+      #path: ${GOPATH}/src/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/tlsca/tlsca.org3.private.ledger.com-cert.pem
+      path: ${GOPATH}/src/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/peers/peer1.org3.private.ledger.com/tls/ca.crt
   
 
 #
@@ -294,7 +294,7 @@ certificateAuthorities:
 
     tlsCACerts:
       # Comma-Separated list of paths
-      path: ${GOPATH}/src/github.com/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/ca/ca.org3.private.ledger.com-cert.pem
+      path: ${GOPATH}/src/privateledger/fixtures/crypto-config/peerOrganizations/org3.private.ledger.com/ca/ca.org3.private.ledger.com-cert.pem
 
     # Fabric-CA supports dynamic user enrollment via REST APIs. A "root" user, a.k.a registrar, is
     # needed to enroll and invoke new users.

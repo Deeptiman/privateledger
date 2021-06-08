@@ -1,17 +1,17 @@
 package invoke
 
 import (
+	"privateledger/blockchain/org"
+	"privateledger/chaincode/model"
 	"fmt"
-	"sync"
 	"strconv"
-	"github.com/privateledger/chaincode/model"
-	"github.com/privateledger/blockchain/org"
+	"sync"
+
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/event"
-
 )
 
-func(s *OrgInvoke) ShareDataToOrg(email string, orgList []string, accessList []int32, targets string) error {
+func (s *OrgInvoke) ShareDataToOrg(email string, orgList []string, accessList []int32, targets string) error {
 
 	fmt.Println(" ############## Invoke Share Data ################")
 
@@ -20,43 +20,42 @@ func(s *OrgInvoke) ShareDataToOrg(email string, orgList []string, accessList []i
 	if err != nil {
 		return fmt.Errorf("unable to get user for the query: %v", err)
 	}
-	
-	threads := len(orgList)	
+
+	threads := len(orgList)
 	var wg sync.WaitGroup
 
-	respond := make(chan string, threads)	
+	respond := make(chan string, threads)
 	wg.Add(threads)
 
 	for i, orgName := range orgList {
 
-		fmt.Println(" *********** Sharing Orgs === "+orgName)
+		fmt.Println(" *********** Sharing Orgs === " + orgName)
 
 		orgSetup := s.User.Setup.ChooseORG(orgName)
-		orgName 			:= 	orgSetup.OrgName
-		orgSdk				:=  orgSetup.Sdk
-		orgAdmin			:=  orgSetup.OrgAdmin
-		caClient 			:= 	orgSetup.CaClient
-		channelClient, event,_ := s.User.Setup.CreateChannelClient(orgSdk, orgName, orgAdmin, caClient)
-	
+		orgName := orgSetup.OrgName
+		orgSdk := orgSetup.Sdk
+		orgAdmin := orgSetup.OrgAdmin
+		caClient := orgSetup.CaClient
+		channelClient, event, _ := s.User.Setup.CreateChannelClient(orgSdk, orgName, orgAdmin, caClient)
+
 		s.shareData(respond, &wg, orgSetup, email, orgName, userData, accessList[i], targets, channelClient, event)
 	}
-		
+
 	wg.Wait()
 	close(respond)
 
 	for queryResp := range respond {
-		fmt.Println("Share Response: "+ queryResp)
+		fmt.Println("Share Response: " + queryResp)
 	}
 
-
-	fmt.Println(" ####### Update in Owner Collection - "+userData.Owner+" ######### ")	
+	fmt.Println(" ####### Update in Owner Collection - " + userData.Owner + " ######### ")
 
 	appFcnName := "updateTarget"
 	eventID := "updateTargetInvoke"
-	channelClient	:=  s.User.Setup.ChannelClient
-	event			:=  s.User.Setup.Event
+	channelClient := s.User.Setup.ChannelClient
+	event := s.User.Setup.Event
 
-	fmt.Println(" ownerCollection - "+s.User.Setup.OrgCollection)
+	fmt.Println(" ownerCollection - " + s.User.Setup.OrgCollection)
 
 	_, err = s.User.Setup.ExecuteChaincodeTranctionEvent(eventID, "invoke",
 		[][]byte{
@@ -65,22 +64,20 @@ func(s *OrgInvoke) ShareDataToOrg(email string, orgList []string, accessList []i
 			[]byte(targets),
 			[]byte(s.User.Setup.OrgCollection),
 			[]byte(eventID),
-		}, s.User.Setup.ChaincodeId, channelClient,event)
+		}, s.User.Setup.ChaincodeId, channelClient, event)
 
 	if err != nil {
-	 	fmt.Errorf("Error - Share User Data From Ledger : %s", err.Error())
-	}	
+		fmt.Errorf("Error - Share User Data From Ledger : %s", err.Error())
+	}
 
 	fmt.Println(" ###################################################### ")
-
 
 	return nil
 }
 
+func (s *OrgInvoke) shareData(respond chan<- string, wg *sync.WaitGroup, orgSetup *org.OrgSetup, email, sharingOrg string, userData *model.User, access int32, targets string, channelClient *channel.Client, ccEvent *event.Client) {
 
-func(s *OrgInvoke) shareData(respond chan<- string, wg *sync.WaitGroup,  orgSetup *org.OrgSetup, email, sharingOrg string, userData *model.User, access int32, targets string, channelClient *channel.Client, ccEvent *event.Client) {
-
-	owner := s.User.Setup.OrgName	
+	owner := s.User.Setup.OrgName
 	queryCreatorOrg := s.User.Setup.OrgName
 	queryCreatorRole := s.Role
 	shareAccess := fmt.Sprint(access)
@@ -92,43 +89,42 @@ func(s *OrgInvoke) shareData(respond chan<- string, wg *sync.WaitGroup,  orgSetu
 		fmt.Errorf("Invalid Hash, unable to invoke share query for - "+orgSetup.OrgName, err)
 	}
 
-	fmt.Println(" ###### Sharing Data from "+userData.Owner+" to "+orgSetup.OrgName+" ####### ")
+	fmt.Println(" ###### Sharing Data from " + userData.Owner + " to " + orgSetup.OrgName + " ####### ")
 
-	fmt.Println("	Collection : "+orgSetup.OrgCollection)
+	fmt.Println("	Collection : " + orgSetup.OrgCollection)
 
-		appFcnName := "shareUser"
-		eventID := "shareUserInvoke"
-				
-		_, err = orgSetup.ExecuteChaincodeTranctionEvent(eventID, "invoke",
+	appFcnName := "shareUser"
+	eventID := "shareUserInvoke"
 
-			[][]byte{
-				
-				[]byte(appFcnName),
+	_, err = orgSetup.ExecuteChaincodeTranctionEvent(eventID, "invoke",
 
-				[]byte(userData.Name),
-				[]byte(userData.Email),					
-				[]byte(userData.Mobile),
-				[]byte(userData.Age),
-				[]byte(userData.Salary),				
-				[]byte(userData.Role),	
-				[]byte(eventID),				
+		[][]byte{
 
-				[]byte(shareAccess),
-				[]byte(queryTxnHash),
+			[]byte(appFcnName),
 
-				[]byte(targets),
-				[]byte(orgSetup.OrgCollection),
-				[]byte(sharingOrg),
-				[]byte(queryCreatorOrg),
-				[]byte(queryCreatorRole),
-				[]byte(needHistory),
+			[]byte(userData.Name),
+			[]byte(userData.Email),
+			[]byte(userData.Mobile),
+			[]byte(userData.Age),
+			[]byte(userData.Salary),
+			[]byte(userData.Role),
+			[]byte(eventID),
 
-			}, orgSetup.ChaincodeId, channelClient, ccEvent)
+			[]byte(shareAccess),
+			[]byte(queryTxnHash),
 
-		if err != nil {
-			fmt.Errorf("Error - Share User Data From Ledger : %s", err.Error())
-		}
-	
+			[]byte(targets),
+			[]byte(orgSetup.OrgCollection),
+			[]byte(sharingOrg),
+			[]byte(queryCreatorOrg),
+			[]byte(queryCreatorRole),
+			[]byte(needHistory),
+		}, orgSetup.ChaincodeId, channelClient, ccEvent)
+
+	if err != nil {
+		fmt.Errorf("Error - Share User Data From Ledger : %s", err.Error())
+	}
+
 	defer wg.Done()
 
 	respond <- fmt.Sprintf("%s responded to share query: %s", orgSetup.OrgName, orgSetup.OrgCollection)

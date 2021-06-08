@@ -1,16 +1,16 @@
 package html
 
 import (
+	"privateledger/blockchain/invoke"
 	"fmt"
 	"net/http"
-	"github.com/privateledger/blockchain/invoke"
 )
 
 func (app *HtmlApp) EditPageHandler() func(http.ResponseWriter, *http.Request) {
 
 	return app.hasSavedToken(func(w http.ResponseWriter, r *http.Request, token string) {
 
-		data := &Data {}
+		data := &Data{}
 
 		if r.FormValue("editSubmitted") == "true" {
 
@@ -26,15 +26,15 @@ func (app *HtmlApp) EditPageHandler() func(http.ResponseWriter, *http.Request) {
 
 			fmt.Println(" ####### Web Input for Update ####### ")
 
-			fmt.Println(" Update UserId = "+userId)
-			fmt.Println(" Update Email = "+email)
-			fmt.Println(" Update Name = "+name)
-			fmt.Println(" Update Age = "+age)
-			fmt.Println(" Update Mobile = "+mobile)
-			fmt.Println(" Update Salary = "+salary)
-			fmt.Println(" Update Targets 	= "+targets)
-			fmt.Println(" Update Role = "+role)
-			
+			fmt.Println(" Update UserId = " + userId)
+			fmt.Println(" Update Email = " + email)
+			fmt.Println(" Update Name = " + name)
+			fmt.Println(" Update Age = " + age)
+			fmt.Println(" Update Mobile = " + mobile)
+			fmt.Println(" Update Salary = " + salary)
+			fmt.Println(" Update Targets 	= " + targets)
+			fmt.Println(" Update Role = " + role)
+
 			fmt.Println(" ###################################### ")
 
 			orgUser := app.Org.GetOrgUser()
@@ -43,10 +43,10 @@ func (app *HtmlApp) EditPageHandler() func(http.ResponseWriter, *http.Request) {
 
 				data.Error = true
 				data.ErrorMsg = "No session available"
-			
+
 			} else {
-				
-				orgInvoke := invoke.OrgInvoke {
+
+				orgInvoke := invoke.OrgInvoke{
 					User: orgUser,
 					Role: creatorRole,
 				}
@@ -62,11 +62,11 @@ func (app *HtmlApp) EditPageHandler() func(http.ResponseWriter, *http.Request) {
 					if err != nil {
 						data.Error = true
 						data.ErrorMsg = err.Error()
-					}  
+					}
 
 					data.UpdateUser = email
 					data.Update = true
-				}				
+				}
 			}
 		} else {
 			data.Error = true

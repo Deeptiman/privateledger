@@ -1,16 +1,15 @@
 package invoke
 
 import (
-	"fmt"
+	"privateledger/chaincode/model"
 	"encoding/json"
-	"github.com/privateledger/chaincode/model"
+	"fmt"
 )
 
-func(s *OrgInvoke) GetHistoryFromLedger(email string) ([]model.HistoryData,error) {
+func (s *OrgInvoke) GetHistoryFromLedger(email string) ([]model.HistoryData, error) {
 
 	fmt.Println(" ############## Invoke Get History ################")
-	
-	 
+
 	eventID := "getHistoryByEmail"
 
 	historyData, err := s.User.Setup.ExecuteChaincodeTranctionEvent(eventID, "invoke",
@@ -18,7 +17,7 @@ func(s *OrgInvoke) GetHistoryFromLedger(email string) ([]model.HistoryData,error
 			[]byte("readHistory"),
 			[]byte(email),
 			[]byte(eventID),
-		}, s.User.Setup.ChaincodeId, s.User.ChannelClient,s.User.Event)
+		}, s.User.Setup.ChaincodeId, s.User.ChannelClient, s.User.Event)
 
 	if err != nil {
 		return nil, fmt.Errorf("Error - Get History Data From Ledger : %s", err.Error())
@@ -28,7 +27,7 @@ func(s *OrgInvoke) GetHistoryFromLedger(email string) ([]model.HistoryData,error
 
 	allHistoryData := make([]model.HistoryData, 0)
 
-	if historyData !=nil && historyData.Payload == nil {
+	if historyData != nil && historyData.Payload == nil {
 		return nil, fmt.Errorf("unable to get response for the query: %v", err)
 	}
 
@@ -45,7 +44,7 @@ func(s *OrgInvoke) GetHistoryFromLedger(email string) ([]model.HistoryData,error
 
 	fmt.Println("Total History for "+email, len(allHistoryData))
 
-	/*for _, history := range allHistoryData {		
+	/*for _, history := range allHistoryData {
 		fmt.Println("History - "+history.QueryCreator+" -- "+history.QueryCreatorOrg+" -- "+history.Query+" -- "+history.Remarks)
 	}*/
 

@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"strings"
-	"github.com/privateledger/blockchain/org"
-	"github.com/privateledger/web"	
-	"github.com/privateledger/web/html"
-	"github.com/privateledger/web/rest"
+	"privateledger/blockchain/org"
+	"privateledger/web"	
+	"privateledger/web/html"
+	"privateledger/web/rest"
 )
 
 
